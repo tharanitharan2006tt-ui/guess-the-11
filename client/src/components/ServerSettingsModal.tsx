@@ -41,6 +41,18 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
       setInputUrl(activeUrl);
       setIsConnected(socketService.isConnected());
       setTestStatus(null);
+
+      // Listen to live socket connection changes
+      const unsub = socketService.onConnectionChange((connected) => {
+        setIsConnected(connected);
+      });
+
+      // Auto-test active URL so user immediately sees connectivity
+      handleTestConnection(activeUrl);
+
+      return () => {
+        unsub();
+      };
     }
   }, [isOpen]);
 
@@ -56,7 +68,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
 
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 4000);
+      const timer = setTimeout(() => controller.abort(), 10000);
 
       const res = await fetch(`${urlToTest}/health`, {
         signal: controller.signal,
@@ -71,6 +83,8 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
           success: true,
           message: `Connected successfully! (Ping: ${ping}ms)`
         });
+        // Also trigger socket connect to ensure socket is active
+        socketService.connect();
       } else {
         setTestStatus({
           testing: false,
@@ -82,7 +96,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
       setTestStatus({
         testing: false,
         success: false,
-        message: err.name === 'AbortError' ? 'Connection timed out (4s)' : 'Cannot reach server at this address'
+        message: err.name === 'AbortError' ? 'Connection timed out (10s)' : 'Cannot reach server at this address'
       });
     }
   };
