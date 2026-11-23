@@ -10,7 +10,7 @@ interface ServerSettingsModalProps {
 const PRESETS = [
   {
     name: 'Live Cloud Server (Recommended - Global)',
-    url: 'https://remains-continent-shopzilla-dream.trycloudflare.com',
+    url: 'https://trails-compressed-whom-compare.trycloudflare.com',
     icon: Globe,
     description: 'Play anywhere worldwide on ANY Wi-Fi or 4G/5G mobile network'
   },

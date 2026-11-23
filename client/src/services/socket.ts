@@ -31,7 +31,7 @@ export const getBackendUrl = (): string => {
   }
 
   // 4. Default fallback: Live Global Cloud Server (works on ANY Wi-Fi, 4G, or network worldwide)
-  return 'https://remains-continent-shopzilla-dream.trycloudflare.com';
+  return 'https://trails-compressed-whom-compare.trycloudflare.com';
 };
 
 type ConnectionListener = (connected: boolean, url: string) => void;
@@ -83,12 +83,13 @@ class SocketService {
       }
 
       this.socket = io(this.url, {
-        transports: ['websocket', 'polling'],
+        transports: ['polling', 'websocket'],
         autoConnect: true,
         reconnection: true,
-        reconnectionAttempts: 10,
+        reconnectionAttempts: 25,
         reconnectionDelay: 1000,
-        timeout: 6000
+        reconnectionDelayMax: 5000,
+        timeout: 15000
       });
 
       this.socket.on('connect', () => {
@@ -128,7 +129,7 @@ class SocketService {
   private emitWithTimeout<T>(
     event: string,
     payload: any,
-    timeoutMs: number = 6000
+    timeoutMs: number = 15000
   ): Promise<T> {
     return new Promise((resolve) => {
       const s = this.getSocket();
@@ -144,22 +145,39 @@ class SocketService {
         }
       }, timeoutMs);
 
-      try {
-        s.emit(event, payload, (res: T) => {
+      const doEmit = () => {
+        try {
+          s.emit(event, payload, (res: T) => {
+            if (!finished) {
+              finished = true;
+              clearTimeout(timer);
+              resolve(res);
+            }
+          });
+        } catch (err: any) {
           if (!finished) {
             finished = true;
             clearTimeout(timer);
-            resolve(res);
+            resolve({
+              success: false,
+              error: err?.message || 'Socket emit failed'
+            } as unknown as T);
+          }
+        }
+      };
+
+      if (s.connected) {
+        doEmit();
+      } else {
+        // Wait for connect event or emit directly if reconnecting
+        s.once('connect', () => {
+          if (!finished) {
+            doEmit();
           }
         });
-      } catch (err: any) {
-        if (!finished) {
-          finished = true;
-          clearTimeout(timer);
-          resolve({
-            success: false,
-            error: `Socket communication error: ${err.message}`
-          } as unknown as T);
+        // Also ensure connection is attempted
+        if (!s.active) {
+          s.connect();
         }
       }
     });
@@ -170,7 +188,7 @@ class SocketService {
     player: { id: string; username: string; avatar: string },
     settings: Partial<RoomSettings>
   ): Promise<{ success: boolean; roomCode?: string; state?: RoomState; error?: string }> {
-    return this.emitWithTimeout(SOCKET_EVENTS.CREATE_ROOM, { player, settings }, 6000);
+    return this.emitWithTimeout(SOCKET_EVENTS.CREATE_ROOM, { player, settings }, 15000);
   }
 
   // Join room with optional room password
@@ -179,7 +197,7 @@ class SocketService {
     player: { id: string; username: string; avatar: string },
     password?: string
   ): Promise<{ success: boolean; roomCode?: string; state?: RoomState; error?: string; requiresPassword?: boolean }> {
-    return this.emitWithTimeout(SOCKET_EVENTS.JOIN_ROOM, { roomCode, player, password }, 6000);
+    return this.emitWithTimeout(SOCKET_EVENTS.JOIN_ROOM, { roomCode, player, password }, 15000);
   }
 
   // Leave room
@@ -193,12 +211,12 @@ class SocketService {
     roomCode: string,
     playerId: string
   ): Promise<{ success: boolean; state?: RoomState; error?: string }> {
-    return this.emitWithTimeout(SOCKET_EVENTS.RECONNECT, { roomCode, playerId }, 6000);
+    return this.emitWithTimeout(SOCKET_EVENTS.RECONNECT, { roomCode, playerId }, 15000);
   }
 
   // Start game
   public startGame(roomCode: string, playerId: string): Promise<{ success: boolean; error?: string }> {
-    return this.emitWithTimeout(SOCKET_EVENTS.START_GAME, { roomCode, playerId }, 6000);
+    return this.emitWithTimeout(SOCKET_EVENTS.START_GAME, { roomCode, playerId }, 15000);
   }
 
   // Submit guess

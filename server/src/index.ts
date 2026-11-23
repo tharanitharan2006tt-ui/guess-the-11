@@ -25,8 +25,8 @@ const io = new Server(httpServer, {
     origin: '*',
     methods: ['GET', 'POST']
   },
-  pingInterval: 10000,
-  pingTimeout: 5000
+  pingInterval: 25000,
+  pingTimeout: 20000
 });
 
 // Initialize Room Manager & Sockets

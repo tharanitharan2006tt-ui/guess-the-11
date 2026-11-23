@@ -29,7 +29,7 @@ jobs:
 
       - name: Build Shared & Client
         env:
-          VITE_BACKEND_URL: https://remains-continent-shopzilla-dream.trycloudflare.com
+          VITE_BACKEND_URL: https://trails-compressed-whom-compare.trycloudflare.com
         run: |
           npm run build:shared
           npm run build:client
@@ -125,7 +125,7 @@ jobs:
 
       - name: Build Shared & Client Web
         env:
-          VITE_BACKEND_URL: https://remains-continent-shopzilla-dream.trycloudflare.com
+          VITE_BACKEND_URL: https://trails-compressed-whom-compare.trycloudflare.com
         run: |
           npm run build:shared
           npm run build:client
