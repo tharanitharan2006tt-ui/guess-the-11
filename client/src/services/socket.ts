@@ -6,15 +6,22 @@ import {
   DrawStroke
 } from '@guess-the-11/shared';
 
-export const DEFAULT_SERVER_URL = 'https://trails-compressed-whom-compare.trycloudflare.com';
+export const DEFAULT_SERVER_URL = 'https://guess-the-11-backend.onrender.com';
 
 // Determine backend URL with multi-device support
 export const getBackendUrl = (): string => {
   // 1. Check local storage override if user configured it in-app
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('guessthe11_server_url');
-    // Clean up any old expired tunnels
-    if (stored && (stored.includes('remains-continent-shopzilla') || !stored.startsWith('http'))) {
+    // Automatically migrate away from temporary tunnels to permanent Render cloud server
+    if (
+      stored &&
+      (stored.includes('trycloudflare.com') ||
+       stored.includes('loca.lt') ||
+       stored.includes('remains-continent') ||
+       stored.includes('trails-compressed') ||
+       !stored.startsWith('http'))
+    ) {
       localStorage.setItem('guessthe11_server_url', DEFAULT_SERVER_URL);
       return DEFAULT_SERVER_URL;
     }
@@ -38,7 +45,7 @@ export const getBackendUrl = (): string => {
     return window.location.origin;
   }
 
-  // 4. Default fallback: Live Global Cloud Server (works on ANY Wi-Fi, 4G, or network worldwide)
+  // 4. Default fallback: Live Global 24/7 Render Server (works worldwide on ANY Wi-Fi or 4G/5G)
   return DEFAULT_SERVER_URL;
 };
 

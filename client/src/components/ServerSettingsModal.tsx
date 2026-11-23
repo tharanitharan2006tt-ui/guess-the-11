@@ -9,10 +9,10 @@ interface ServerSettingsModalProps {
 
 const PRESETS = [
   {
-    name: 'Live Cloud Server (Recommended - Global)',
-    url: 'https://trails-compressed-whom-compare.trycloudflare.com',
+    name: 'Live Cloud Server (Recommended - 24/7 Global)',
+    url: 'https://guess-the-11-backend.onrender.com',
     icon: Globe,
-    description: 'Play anywhere worldwide on ANY Wi-Fi or 4G/5G mobile network'
+    description: 'Permanent 24/7 Render Cloud Server - Play anywhere on ANY Wi-Fi or 4G/5G'
   },
   {
     name: 'Home Wi-Fi (Same Network)',
