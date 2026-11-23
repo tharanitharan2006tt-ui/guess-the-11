@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B1120"/>
+      <stop offset="50%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#070913"/>
+    </linearGradient>
+    <linearGradient id="neonPurple" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C084FC"/>
+      <stop offset="100%" stop-color="#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="electricBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047"/>
+      <stop offset="100%" stop-color="#F59E0B"/>
+    </linearGradient>
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Hexagon Outer Shield -->
+  <polygon points="256,20 472,130 472,382 256,492 40,382 40,130" fill="url(#bgGrad)" stroke="url(#electricBlue)" stroke-width="8" filter="url(#neonGlow)"/>
+
+  <!-- Inner Cyber Rings -->
+  <circle cx="256" cy="256" r="180" fill="none" stroke="#6366F1" stroke-width="3" stroke-dasharray="12 8" opacity="0.4"/>
+  <circle cx="256" cy="256" r="140" fill="none" stroke="url(#neonPurple)" stroke-width="4" opacity="0.6"/>
+
+  <!-- Stylized "11" with Neon Glow -->
+  <g filter="url(#neonGlow)">
+    <!-- First '1' -->
+    <path d="M 180,330 L 220,330 L 220,180 L 175,200 L 175,170 L 225,150 L 250,150 L 250,330 Z" fill="url(#goldGrad)"/>
+    <!-- Second '1' -->
+    <path d="M 270,330 L 310,330 L 310,180 L 265,200 L 265,170 L 315,150 L 340,150 L 340,330 Z" fill="url(#goldGrad)"/>
+  </g>
+
+  <!-- Drawing Pencil/Brush Accent -->
+  <path d="M 360,110 L 410,160 L 340,230 L 290,180 Z" fill="url(#electricBlue)" filter="url(#neonGlow)"/>
+  <polygon points="290,180 270,240 330,220" fill="#F43F5E"/>
+  
+  <!-- Banner Text -->
+  <text x="256" y="390" font-family="'Orbitron', sans-serif" font-weight="900" font-size="34" fill="#FFFFFF" text-anchor="middle" letter-spacing="4" filter="url(#neonGlow)">
+    GUESS
+  </text>
+  <text x="256" y="425" font-family="'Orbitron', sans-serif" font-weight="800" font-size="20" fill="#00F0FF" text-anchor="middle" letter-spacing="8">
+    MULTIPLAYER
+  </text>
+</svg>

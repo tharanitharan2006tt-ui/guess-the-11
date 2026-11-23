@@ -1,0 +1,34 @@
+{
+  "name": "guess-the-11",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Guess The 11 - Ultimate Online Multiplayer Guessing & Drawing Game",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "install:all": "npm install --workspaces",
+    "build:shared": "npm --workspace=shared run build",
+    "build:server": "npm --workspace=server run build",
+    "build:client": "npm --workspace=client run build",
+    "build": "npm run build:shared && npm run build:server && npm run build:client",
+    "test:server": "npm --workspace=server test",
+    "test:client": "npm --workspace=client test",
+    "test:multiplayer": "npm --workspace=server run test:multiplayer",
+    "test": "npm run test:server && npm run test:client && npm run test:multiplayer",
+    "dev:server": "npm --workspace=server run dev",
+    "dev:client": "npm --workspace=client run dev"
+  },
+  "keywords": [
+    "multiplayer",
+    "drawing-game",
+    "guess-the-11",
+    "socketio",
+    "react",
+    "capacitor"
+  ],
+  "author": "Guess The 11 Team",
+  "license": "UNLICENSED"
+}

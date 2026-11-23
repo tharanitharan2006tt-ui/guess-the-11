@@ -1,0 +1,104 @@
+name: Build GUESS THE 11 Mobile Apps (Android & iOS)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    name: Build Android Release APK & AAB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Shared & Client
+        run: |
+          npm run build:shared
+          npm run build:client
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Sync Capacitor Android
+        run: |
+          cd client
+          npx cap sync android
+
+      - name: Grant Execute Permission to Gradlew
+        run: chmod +x client/android/gradlew
+
+      - name: Build Android Release APK & Bundle
+        run: |
+          cd client/android
+          ./gradlew assembleRelease
+          ./gradlew bundleRelease
+
+      - name: Organize Release Artifacts
+        run: |
+          mkdir -p release/android
+          cp client/android/app/build/outputs/apk/release/app-release-unsigned.apk release/android/GuessThe11.apk || cp client/android/app/build/outputs/apk/debug/app-debug.apk release/android/GuessThe11.apk
+          cp client/android/app/build/outputs/bundle/release/app-release.aab release/android/GuessThe11.aab || true
+
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GuessThe11-Android-APK
+          path: client/android/app/build/outputs/apk/**/*.apk
+
+      - name: Upload Android AAB
+        uses: actions/upload-artifact@v4
+        with:
+          name: GuessThe11-Android-AAB
+          path: client/android/app/build/outputs/bundle/**/*.aab
+
+  build-ios:
+    name: Prepare & Verify iOS Xcode Project
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Shared & Client Web
+        run: |
+          npm run build:shared
+          npm run build:client
+
+      - name: Sync Capacitor iOS
+        run: |
+          cd client
+          npx cap sync ios
+
+      - name: Upload iOS Xcode Project Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: GuessThe11-iOS-Xcode-Project
+          path: client/ios/
