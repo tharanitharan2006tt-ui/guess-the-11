@@ -5,7 +5,8 @@ import { socketService } from '../services/socket';
 import { UserProfile } from '../services/supabase';
 import { LobbyScreen } from './LobbyScreen';
 import { GameScreen } from './GameScreen';
-import { ShieldAlert, ArrowLeft, Loader2 } from 'lucide-react';
+import { ShieldAlert, ArrowLeft, Loader2, Settings } from 'lucide-react';
+import { ServerSettingsModal } from '../components/ServerSettingsModal';
 
 interface RoomControllerProps {
   profile: UserProfile;
@@ -21,6 +22,7 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
   const [roomState, setRoomState] = useState<RoomState | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isServerSettingsOpen, setIsServerSettingsOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (!roomCode) {
@@ -97,14 +99,28 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
           <p className="text-xs text-slate-400 mb-6 font-sans">
             {error || 'Room does not exist or has already completed.'}
           </p>
-          <button
-            onClick={() => navigate('/')}
-            className="w-full py-3 rounded-2xl btn-3d-slate text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Home
-          </button>
+          <div className="flex flex-col gap-2.5">
+            <button
+              onClick={() => setIsServerSettingsOpen(true)}
+              className="w-full py-3 rounded-2xl btn-3d-amber text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <Settings className="w-4 h-4" />
+              Configure Server Address
+            </button>
+            <button
+              onClick={() => navigate('/')}
+              className="w-full py-3 rounded-2xl btn-3d-slate text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Home
+            </button>
+          </div>
         </div>
+
+        <ServerSettingsModal
+          isOpen={isServerSettingsOpen}
+          onClose={() => setIsServerSettingsOpen(false)}
+        />
       </div>
     );
   }

@@ -6,8 +6,8 @@ import { CONFIG } from '../config.js';
 export function createApiRouter(roomManager: RoomManager): Router {
   const router = Router();
 
-  // Health check
-  router.get('/health', (_req, res) => {
+  // Health check (supports both /health and /api/health)
+  const handleHealth = (_req: any, res: any) => {
     res.json({
       status: 'ok',
       service: 'Guess The 11 Backend',
@@ -15,7 +15,10 @@ export function createApiRouter(roomManager: RoomManager): Router {
       uptime: process.uptime(),
       timestamp: new Date().toISOString()
     });
-  });
+  };
+
+  router.get('/health', handleHealth);
+  router.get('/api/health', handleHealth);
 
   // Admin stats endpoint (PHASE 20)
   router.get('/api/admin/stats', async (req, res) => {

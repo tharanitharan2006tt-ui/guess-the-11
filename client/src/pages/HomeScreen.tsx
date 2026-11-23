@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserProfile, AVATARS } from '../services/supabase';
+import { UserProfile } from '../services/supabase';
 import { socketService } from '../services/socket';
 import {
   Play,
@@ -13,13 +13,15 @@ import {
   Palette,
   Sparkles,
   ShieldAlert,
-  ArrowRight
+  Server,
+  Loader2
 } from 'lucide-react';
 import { CreateRoomModal } from '../components/CreateRoomModal';
 import { JoinRoomModal } from '../components/JoinRoomModal';
 import { HowToPlayModal } from '../components/HowToPlayModal';
 import { LeaderboardModal } from '../components/LeaderboardModal';
 import { AuthModal } from '../components/AuthModal';
+import { ServerSettingsModal } from '../components/ServerSettingsModal';
 import { Navbar } from '../components/Navbar';
 
 interface HomeScreenProps {
@@ -34,25 +36,41 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
   const [isHowToPlayOpen, setIsHowToPlayOpen] = useState(false);
   const [isLeaderboardOpen, setIsLeaderboardOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isServerSettingsOpen, setIsServerSettingsOpen] = useState(false);
+  const [isServerConnected, setIsServerConnected] = useState(socketService.isConnected());
+  const [currentServerUrl, setCurrentServerUrl] = useState(socketService.getServerUrl());
+
   const [quickPlayLoading, setQuickPlayLoading] = useState(false);
+  const [isCreatingRoom, setIsCreatingRoom] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const unsub = socketService.onConnectionChange((connected, url) => {
+      setIsServerConnected(connected);
+      setCurrentServerUrl(url);
+    });
+    return unsub;
+  }, []);
 
   // Handle Quick Play
   const handleQuickPlay = async () => {
     setQuickPlayLoading(true);
     setErrorMessage(null);
     try {
-      const backendUrl =
-        import.meta.env.VITE_BACKEND_URL ||
-        (window.location.hostname !== 'localhost' ? window.location.origin : 'http://localhost:4000');
-      const res = await fetch(`${backendUrl}/api/rooms/quick-play`);
+      const backendUrl = socketService.getServerUrl();
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
+
+      const res = await fetch(`${backendUrl}/api/rooms/quick-play`, {
+        signal: controller.signal,
+        headers: { 'Bypass-Tunnel-Reminder': 'true' }
+      });
+      clearTimeout(timer);
       const data = await res.json();
 
       if (data.success && data.roomCode) {
-        // Found open room, join it!
         navigate(`/room/${data.roomCode}`);
       } else {
-        // No open room found, automatically create a public standard room!
         const createRes = await socketService.createRoom(
           { id: profile.id, username: profile.username, avatar: profile.avatar },
           { gameMode: 'standard', isPrivate: false }
@@ -60,11 +78,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         if (createRes.success && createRes.roomCode) {
           navigate(`/room/${createRes.roomCode}`);
         } else {
-          setErrorMessage(createRes.error || 'Failed to matchmake');
+          setErrorMessage(createRes.error || 'Failed to matchmake. Ensure server is online.');
         }
       }
     } catch {
-      setErrorMessage('Could not connect to matchmaking server');
+      setErrorMessage(`Cannot reach server at ${currentServerUrl}. Please configure Server Address.`);
     } finally {
       setQuickPlayLoading(false);
     }
@@ -72,16 +90,23 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
 
   // Handle Create Room
   const handleCreateRoom = async (settings: any) => {
-    setIsCreateOpen(false);
+    setIsCreatingRoom(true);
     setErrorMessage(null);
-    const res = await socketService.createRoom(
-      { id: profile.id, username: profile.username, avatar: profile.avatar },
-      settings
-    );
-    if (res.success && res.roomCode) {
-      navigate(`/room/${res.roomCode}`);
-    } else {
-      setErrorMessage(res.error || 'Failed to create room');
+    try {
+      const res = await socketService.createRoom(
+        { id: profile.id, username: profile.username, avatar: profile.avatar },
+        settings
+      );
+      if (res.success && res.roomCode) {
+        setIsCreateOpen(false);
+        navigate(`/room/${res.roomCode}`);
+      } else {
+        setErrorMessage(res.error || 'Failed to create room. Ensure server is running.');
+      }
+    } catch (err: any) {
+      setErrorMessage(err.message || 'Server did not respond');
+    } finally {
+      setIsCreatingRoom(false);
     }
   };
 
@@ -98,6 +123,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         onOpenAuth={() => setIsAuthOpen(true)}
         onOpenLeaderboard={() => setIsLeaderboardOpen(true)}
         onOpenHowToPlay={() => setIsHowToPlayOpen(true)}
+        onOpenServerSettings={() => setIsServerSettingsOpen(true)}
       />
 
       {/* Main Hero Container */}
@@ -105,6 +131,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         {/* Subtle warm ambient glows */}
         <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[500px] h-[300px] bg-amber-500/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-40 left-1/4 w-[350px] h-[250px] bg-orange-600/10 rounded-full blur-[100px] pointer-events-none" />
+
+        {/* Server Disconnected Banner */}
+        {!isServerConnected && (
+          <div
+            onClick={() => setIsServerSettingsOpen(true)}
+            className="w-full max-w-md mb-5 p-3 rounded-2xl bg-amber-500/15 border-2 border-amber-500/40 text-amber-300 text-xs font-game font-semibold flex items-center justify-between shadow-lg cursor-pointer hover:bg-amber-500/25 transition-all"
+          >
+            <div className="flex items-center gap-2.5">
+              <Server className="w-4 h-4 text-amber-400 flex-shrink-0 animate-pulse" />
+              <span>Server disconnected ({currentServerUrl})</span>
+            </div>
+            <span className="text-[11px] underline font-bold uppercase tracking-wide">
+              Configure ⚙️
+            </span>
+          </div>
+        )}
 
         {/* Brand Banner */}
         <div className="text-center relative z-10 max-w-2xl mx-auto mb-8">
@@ -127,9 +169,17 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
 
         {/* Error notification banner if any */}
         {errorMessage && (
-          <div className="w-full max-w-md mb-6 p-3.5 rounded-2xl bg-rose-500/15 border-2 border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center gap-2.5 shadow-md">
-            <ShieldAlert className="w-4 h-4 flex-shrink-0 text-rose-400" />
-            <span>{errorMessage}</span>
+          <div className="w-full max-w-md mb-6 p-3.5 rounded-2xl bg-rose-500/15 border-2 border-rose-500/40 text-rose-300 text-xs font-semibold flex items-center justify-between gap-2.5 shadow-md">
+            <div className="flex items-center gap-2">
+              <ShieldAlert className="w-4 h-4 flex-shrink-0 text-rose-400" />
+              <span>{errorMessage}</span>
+            </div>
+            <button
+              onClick={() => setIsServerSettingsOpen(true)}
+              className="text-[11px] underline font-game font-bold uppercase flex-shrink-0 text-amber-300 cursor-pointer"
+            >
+              Settings
+            </button>
           </div>
         )}
 
@@ -143,11 +193,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
           >
             <div className="flex items-center gap-3">
               <div className="p-2.5 rounded-xl bg-slate-900/15 text-slate-900">
-                <Zap className="w-6 h-6 fill-current animate-bounce-subtle" />
+                {quickPlayLoading ? (
+                  <Loader2 className="w-6 h-6 animate-spin text-slate-900" />
+                ) : (
+                  <Zap className="w-6 h-6 fill-current animate-bounce-subtle" />
+                )}
               </div>
               <div className="text-left">
                 <span className="block text-lg font-game font-bold tracking-tight text-slate-900">
-                  Quick Play
+                  {quickPlayLoading ? 'Searching Match...' : 'Quick Play'}
                 </span>
                 <span className="block text-xs font-sans font-semibold text-slate-800/80">
                   Instant Matchmaking
@@ -163,14 +217,15 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
           <div className="grid grid-cols-2 gap-3">
             <button
               onClick={() => setIsCreateOpen(true)}
-              className="p-4 rounded-2xl btn-3d-coral text-left flex flex-col justify-between group select-none cursor-pointer"
+              disabled={isCreatingRoom}
+              className="p-4 rounded-2xl btn-3d-coral text-left flex flex-col justify-between group select-none cursor-pointer disabled:opacity-50"
             >
               <div className="p-2 rounded-xl bg-black/15 text-white w-fit mb-3 group-hover:scale-110 transition-transform">
-                <PlusCircle className="w-5 h-5" />
+                {isCreatingRoom ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
               </div>
               <div>
                 <h3 className="font-game font-bold text-base text-white">
-                  Create Room
+                  {isCreatingRoom ? 'Creating...' : 'Create Room'}
                 </h3>
                 <p className="text-[11px] font-sans font-medium text-orange-100/90 mt-0.5">
                   Host 11-player squad
@@ -257,14 +312,22 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
       </main>
 
       {/* Footer */}
-      <footer className="w-full py-4 border-t border-slate-800/80 text-center text-xs text-slate-500 font-sans">
-        GUESS THE 11 © 2026 • Crafted with passion for online party gaming
+      <footer className="w-full py-4 border-t border-slate-800/80 text-center text-xs text-slate-500 font-sans flex items-center justify-center gap-2">
+        <span>GUESS THE 11 © 2026 • Realtime Multiplayer Gaming</span>
+        <span>•</span>
+        <button
+          onClick={() => setIsServerSettingsOpen(true)}
+          className="text-amber-400/80 hover:text-amber-300 font-mono text-[11px] underline cursor-pointer"
+        >
+          Server Settings
+        </button>
       </footer>
 
       {/* Modals */}
       <CreateRoomModal
         isOpen={isCreateOpen}
         onClose={() => setIsCreateOpen(false)}
+        isLoading={isCreatingRoom}
         onCreate={handleCreateRoom}
       />
       <JoinRoomModal
@@ -285,6 +348,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         onClose={() => setIsAuthOpen(false)}
         currentProfile={profile}
         onProfileUpdated={onProfileUpdated}
+      />
+      <ServerSettingsModal
+        isOpen={isServerSettingsOpen}
+        onClose={() => setIsServerSettingsOpen(false)}
       />
     </div>
   );

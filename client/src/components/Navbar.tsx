@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { UserProfile, AVATARS } from '../services/supabase';
 import { sounds } from '../utils/sound';
-import { Volume2, VolumeX, Shield, Trophy, HelpCircle } from 'lucide-react';
+import { socketService } from '../services/socket';
+import { Volume2, VolumeX, Shield, Trophy, HelpCircle, Server } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface NavbarProps {
@@ -9,15 +10,25 @@ interface NavbarProps {
   onOpenAuth: () => void;
   onOpenLeaderboard: () => void;
   onOpenHowToPlay: () => void;
+  onOpenServerSettings?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   profile,
   onOpenAuth,
   onOpenLeaderboard,
-  onOpenHowToPlay
+  onOpenHowToPlay,
+  onOpenServerSettings
 }) => {
-  const [soundEnabled, setSoundEnabled] = React.useState(sounds.enabled);
+  const [soundEnabled, setSoundEnabled] = useState(sounds.enabled);
+  const [isServerConnected, setIsServerConnected] = useState(socketService.isConnected());
+
+  useEffect(() => {
+    const unsub = socketService.onConnectionChange((connected) => {
+      setIsServerConnected(connected);
+    });
+    return unsub;
+  }, []);
 
   const handleToggleSound = () => {
     const next = sounds.toggleSound();
@@ -55,14 +66,14 @@ export const Navbar: React.FC<NavbarProps> = ({
         <nav className="hidden md:flex items-center gap-2 text-sm font-semibold font-game">
           <button
             onClick={onOpenHowToPlay}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800/60 transition-all cursor-pointer"
           >
             <HelpCircle className="w-4 h-4 text-sky-400" />
             <span>How to Play</span>
           </button>
           <button
             onClick={onOpenLeaderboard}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-300 hover:text-amber-400 hover:bg-slate-800/60 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-slate-300 hover:text-amber-400 hover:bg-slate-800/60 transition-all cursor-pointer"
           >
             <Trophy className="w-4 h-4 text-amber-400" />
             <span>Leaderboard</span>
@@ -78,10 +89,28 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2.5">
+          {/* Server Connection Status Pill */}
+          {onOpenServerSettings && (
+            <button
+              onClick={onOpenServerSettings}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-game font-semibold border transition-all cursor-pointer ${
+                isServerConnected
+                  ? 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/20'
+                  : 'bg-rose-500/15 border-rose-500/40 text-rose-300 hover:bg-rose-500/25 animate-pulse'
+              }`}
+              title="Click to configure Server Address"
+            >
+              <Server className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">
+                {isServerConnected ? 'Online' : 'Offline'}
+              </span>
+            </button>
+          )}
+
           {/* Sound Toggle */}
           <button
             onClick={handleToggleSound}
-            className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:border-slate-500 transition-all"
+            className="p-2 rounded-xl bg-slate-800/80 border border-slate-700/60 text-slate-300 hover:text-white hover:border-slate-500 transition-all cursor-pointer"
             title={soundEnabled ? 'Mute Sounds' : 'Unmute Sounds'}
             aria-label="Toggle Sound"
           >
@@ -95,7 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* User Profile Pill Button */}
           <button
             onClick={onOpenAuth}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-800/90 border-2 border-slate-700/70 hover:border-amber-400/60 hover:bg-slate-800 transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-800/90 border-2 border-slate-700/70 hover:border-amber-400/60 hover:bg-slate-800 transition-all shadow-sm active:scale-95 cursor-pointer"
           >
             <span className="text-xl leading-none select-none" role="img" aria-label={currentAvatar.label}>
               {currentAvatar.icon}

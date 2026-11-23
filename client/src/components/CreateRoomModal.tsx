@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { X, Play, Settings2, Users, Flame, Lock } from 'lucide-react';
+import { X, Play, Settings2, Users, Flame, Lock, Loader2 } from 'lucide-react';
 import { GameMode } from '@guess-the-11/shared';
 
 interface CreateRoomModalProps {
   isOpen: boolean;
   onClose: () => void;
+  isLoading?: boolean;
   onCreate: (settings: {
     gameMode: GameMode;
     category: string;
@@ -30,6 +31,7 @@ const CATEGORIES = [
 export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   isOpen,
   onClose,
+  isLoading = false,
   onCreate
 }) => {
   const [gameMode, setGameMode] = useState<GameMode>('standard');
@@ -191,10 +193,20 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
           <div className="pt-2">
             <button
               type="submit"
-              className="w-full py-3.5 rounded-2xl btn-3d-coral flex items-center justify-center gap-2 text-sm uppercase tracking-wide cursor-pointer"
+              disabled={isLoading}
+              className="w-full py-3.5 rounded-2xl btn-3d-coral flex items-center justify-center gap-2 text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
             >
-              <Play className="w-4 h-4 fill-current" />
-              Create Room
+              {isLoading ? (
+                <>
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  Creating Room...
+                </>
+              ) : (
+                <>
+                  <Play className="w-4 h-4 fill-current" />
+                  Create Room
+                </>
+              )}
             </button>
           </div>
         </form>
