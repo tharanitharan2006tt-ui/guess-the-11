@@ -6,11 +6,18 @@ import {
   DrawStroke
 } from '@guess-the-11/shared';
 
+export const DEFAULT_SERVER_URL = 'https://trails-compressed-whom-compare.trycloudflare.com';
+
 // Determine backend URL with multi-device support
 export const getBackendUrl = (): string => {
   // 1. Check local storage override if user configured it in-app
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('guessthe11_server_url');
+    // Clean up any old expired tunnels
+    if (stored && (stored.includes('remains-continent-shopzilla') || !stored.startsWith('http'))) {
+      localStorage.setItem('guessthe11_server_url', DEFAULT_SERVER_URL);
+      return DEFAULT_SERVER_URL;
+    }
     if (stored && stored.trim()) {
       return stored.trim().replace(/\/+$/, '');
     }
@@ -21,17 +28,18 @@ export const getBackendUrl = (): string => {
     return import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, '');
   }
 
-  // 3. If running in a web browser on a remote domain/Vercel, use same origin
+  // 3. If running in a web browser on a remote domain/Vercel (and NOT Capacitor mobile), use same origin
   if (
     typeof window !== 'undefined' &&
     window.location.hostname !== 'localhost' &&
-    !window.location.hostname.includes('127.0.0.1')
+    !window.location.hostname.includes('127.0.0.1') &&
+    !window.location.protocol.includes('capacitor')
   ) {
     return window.location.origin;
   }
 
   // 4. Default fallback: Live Global Cloud Server (works on ANY Wi-Fi, 4G, or network worldwide)
-  return 'https://trails-compressed-whom-compare.trycloudflare.com';
+  return DEFAULT_SERVER_URL;
 };
 
 type ConnectionListener = (connected: boolean, url: string) => void;
