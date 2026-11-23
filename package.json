@@ -8,6 +8,9 @@
     "server",
     "client"
   ],
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "install:all": "npm install --workspaces",
     "build:shared": "npm --workspace=shared run build",
