@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: guess-the-11-backend
+    runtime: node
+    plan: free
+    buildCommand: npm run build:shared && npm run build:server
+    startCommand: node server/dist/index.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: CLIENT_URL
+        value: "*"
