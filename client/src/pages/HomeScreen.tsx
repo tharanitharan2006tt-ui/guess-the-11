@@ -111,9 +111,9 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
   };
 
   // Handle Join Room
-  const handleJoinRoom = (roomCode: string) => {
+  const handleJoinRoom = (roomCode: string, password?: string) => {
     setIsJoinOpen(false);
-    navigate(`/room/${roomCode}`);
+    navigate(`/room/${roomCode}${password ? `?pass=${encodeURIComponent(password)}` : ''}`);
   };
 
   return (

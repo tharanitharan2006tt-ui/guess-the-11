@@ -30,8 +30,8 @@ export const getBackendUrl = (): string => {
     return window.location.origin;
   }
 
-  // 4. Default fallback for mobile APK: Wi-Fi host IP (works across all devices on same Wi-Fi)
-  return 'http://10.92.131.244:4000';
+  // 4. Default fallback: Live Global Cloud Server (works on ANY Wi-Fi, 4G, or network worldwide)
+  return 'https://remains-continent-shopzilla-dream.trycloudflare.com';
 };
 
 type ConnectionListener = (connected: boolean, url: string) => void;
@@ -173,12 +173,13 @@ class SocketService {
     return this.emitWithTimeout(SOCKET_EVENTS.CREATE_ROOM, { player, settings }, 6000);
   }
 
-  // Join room
+  // Join room with optional room password
   public joinRoom(
     roomCode: string,
-    player: { id: string; username: string; avatar: string }
-  ): Promise<{ success: boolean; roomCode?: string; state?: RoomState; error?: string }> {
-    return this.emitWithTimeout(SOCKET_EVENTS.JOIN_ROOM, { roomCode, player }, 6000);
+    player: { id: string; username: string; avatar: string },
+    password?: string
+  ): Promise<{ success: boolean; roomCode?: string; state?: RoomState; error?: string; requiresPassword?: boolean }> {
+    return this.emitWithTimeout(SOCKET_EVENTS.JOIN_ROOM, { roomCode, player, password }, 6000);
   }
 
   // Leave room

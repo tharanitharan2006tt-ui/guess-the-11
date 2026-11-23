@@ -11,7 +11,8 @@ import {
   Play,
   LogOut,
   Users,
-  AlertCircle
+  AlertCircle,
+  Lock
 } from 'lucide-react';
 import { Share } from '@capacitor/share';
 
@@ -29,7 +30,10 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
   const [copied, setCopied] = useState<boolean>(false);
   const [startError, setStartError] = useState<string | null>(null);
 
-  const inviteUrl = `${window.location.origin}/join?room=${roomState.code}`;
+  const hasPassword = Boolean(roomState.settings.password && roomState.settings.password.trim() !== '');
+  const inviteUrl = `${window.location.origin}/join?room=${roomState.code}${
+    hasPassword ? `&pass=${encodeURIComponent(roomState.settings.password!)}` : ''
+  }`;
   const isHost = roomState.hostId === currentUserId;
   const playerCount = roomState.players.length;
   const maxPlayers = roomState.settings.maxPlayers || 11;
@@ -46,7 +50,9 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
   // WhatsApp Share
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `🎮 Join my squad on GUESS THE 11!\nRoom Code: ${roomState.code}\nJoin link: ${inviteUrl}`
+      `🎮 Join my squad on GUESS THE 11!\nRoom ID: ${roomState.code}${
+        hasPassword ? `\nPassword: ${roomState.settings.password}` : ''
+      }\nJoin link: ${inviteUrl}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
@@ -56,7 +62,9 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
     try {
       await Share.share({
         title: 'GUESS THE 11 - Join My Squad!',
-        text: `Play with me in room ${roomState.code}! Can you guess the 11?`,
+        text: `Play with me in room ${roomState.code}!${
+          hasPassword ? ` Password: ${roomState.settings.password}` : ''
+        } Can you guess the 11?`,
         url: inviteUrl,
         dialogTitle: 'Invite Players to Room'
       });
@@ -124,6 +132,14 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
             </button>
           </div>
+
+          {/* Optional Room Password Display */}
+          {hasPassword && (
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-amber-400/10 border border-amber-400/30 text-xs font-mono text-amber-300 mb-3">
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Password: <strong className="text-white">{roomState.settings.password}</strong></span>
+            </div>
+          )}
 
           {/* Waiting Status Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs font-game font-semibold text-white mb-4">

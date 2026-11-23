@@ -18,6 +18,7 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
   const navigate = useNavigate();
 
   const roomCode = (pathCode || searchParams.get('room') || '').toUpperCase().trim();
+  const roomPassword = searchParams.get('pass') || searchParams.get('password') || undefined;
 
   const [roomState, setRoomState] = useState<RoomState | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -47,7 +48,7 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
       id: profile.id,
       username: profile.username,
       avatar: profile.avatar
-    }).then((res) => {
+    }, roomPassword).then((res) => {
       if (res.success && res.state) {
         setRoomState(res.state);
         setLoading(false);

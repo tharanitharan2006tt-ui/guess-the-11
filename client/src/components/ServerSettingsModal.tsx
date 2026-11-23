@@ -9,16 +9,16 @@ interface ServerSettingsModalProps {
 
 const PRESETS = [
   {
+    name: 'Live Cloud Server (Recommended - Global)',
+    url: 'https://remains-continent-shopzilla-dream.trycloudflare.com',
+    icon: Globe,
+    description: 'Play anywhere worldwide on ANY Wi-Fi or 4G/5G mobile network'
+  },
+  {
     name: 'Home Wi-Fi (Same Network)',
     url: 'http://10.92.131.244:4000',
     icon: Wifi,
     description: 'Use when your phone is connected to the same Wi-Fi'
-  },
-  {
-    name: 'Public Cloud Tunnel',
-    url: 'https://guessthe11-server.loca.lt',
-    icon: Globe,
-    description: 'Use on Mobile Data (4G/5G) or outside home'
   },
   {
     name: 'Localhost (This PC)',

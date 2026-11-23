@@ -41,7 +41,7 @@ export function setupSocketHandlers(io: Server, roomManager: RoomManager) {
     });
 
     // JOIN ROOM
-    socket.on(SOCKET_EVENTS.JOIN_ROOM, (data: { roomCode: string; player: Omit<Player, 'socketId' | 'isHost' | 'score' | 'hasDrawn' | 'hasGuessedThisRound' | 'isConnected' | 'joinedAt'> }, callback) => {
+    socket.on(SOCKET_EVENTS.JOIN_ROOM, (data: { roomCode: string; player: Omit<Player, 'socketId' | 'isHost' | 'score' | 'hasDrawn' | 'hasGuessedThisRound' | 'isConnected' | 'joinedAt'>; password?: string }, callback) => {
       try {
         const code = data.roomCode?.toUpperCase()?.trim();
         const room = roomManager.getRoom(code);
@@ -49,6 +49,17 @@ export function setupSocketHandlers(io: Server, roomManager: RoomManager) {
         if (!room) {
           if (typeof callback === 'function') callback({ success: false, error: 'Room does not exist' });
           return;
+        }
+
+        // Validate password if room is password protected
+        if (room.settings.password && room.settings.password.trim() !== '') {
+          const provided = (data.password || '').trim();
+          if (provided !== room.settings.password.trim()) {
+            if (typeof callback === 'function') {
+              callback({ success: false, error: 'Incorrect room password. Please enter the password shared by the host.', requiresPassword: true });
+            }
+            return;
+          }
         }
 
         const newPlayer: Player = {

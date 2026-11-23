@@ -1,20 +1,23 @@
 import React, { useState } from 'react';
-import { X, LogIn, KeyRound } from 'lucide-react';
+import { X, LogIn, KeyRound, Lock } from 'lucide-react';
 
 interface JoinRoomModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onJoin: (roomCode: string) => void;
+  onJoin: (roomCode: string, password?: string) => void;
   initialCode?: string;
+  initialPassword?: string;
 }
 
 export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
   isOpen,
   onClose,
   onJoin,
-  initialCode = ''
+  initialCode = '',
+  initialPassword = ''
 }) => {
   const [code, setCode] = useState<string>(initialCode);
+  const [password, setPassword] = useState<string>(initialPassword);
   const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
@@ -37,7 +40,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
       return;
     }
 
-    onJoin(cleaned);
+    onJoin(cleaned, password.trim() ? password.trim() : undefined);
   };
 
   return (
@@ -81,6 +84,26 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
                 required
               />
               <KeyRound className="w-5 h-5 text-slate-500 absolute left-3.5 top-3.5" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              Room Password / PIN (If private)
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setError(null);
+                }}
+                placeholder="Leave blank if public room"
+                maxLength={30}
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-center text-sm focus:outline-none focus:border-indigo-400"
+              />
+              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
             </div>
           </div>
 

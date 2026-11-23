@@ -12,6 +12,7 @@ interface CreateRoomModalProps {
     difficulty: 'easy' | 'medium' | 'hard' | 'all';
     roundDurationSeconds: number;
     isPrivate: boolean;
+    password?: string;
   }) => void;
 }
 
@@ -39,6 +40,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
   const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard' | 'all'>('all');
   const [roundDuration, setRoundDuration] = useState<number>(75);
   const [isPrivate, setIsPrivate] = useState<boolean>(false);
+  const [roomPassword, setRoomPassword] = useState<string>('');
 
   if (!isOpen) return null;
 
@@ -49,7 +51,8 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
       category,
       difficulty,
       roundDurationSeconds: roundDuration,
-      isPrivate
+      isPrivate,
+      password: isPrivate && roomPassword.trim() ? roomPassword.trim() : undefined
     });
   };
 
@@ -185,9 +188,28 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
               checked={isPrivate}
               onChange={(e) => setIsPrivate(e.target.checked)}
               className="w-4 h-4 accent-amber-400 rounded cursor-pointer"
-            >
-            </input>
+            />
           </div>
+
+          {/* Optional Room Password */}
+          {isPrivate && (
+            <div className="p-3 rounded-2xl bg-slate-950/80 border border-slate-700 animate-in fade-in">
+              <label className="block text-xs font-game font-semibold text-amber-400 mb-1.5 uppercase">
+                Room Password / PIN (Optional)
+              </label>
+              <input
+                type="text"
+                value={roomPassword}
+                onChange={(e) => setRoomPassword(e.target.value)}
+                placeholder="e.g. 1234 or secret"
+                maxLength={20}
+                className="w-full bg-slate-900 border-2 border-slate-700 rounded-xl px-3.5 py-2 text-white font-mono text-sm focus:outline-none focus:border-amber-400"
+              />
+              <p className="text-[10px] text-slate-400 mt-1">
+                Share this password with friends so only they can enter.
+              </p>
+            </div>
+          )}
 
           {/* Create Button */}
           <div className="pt-2">

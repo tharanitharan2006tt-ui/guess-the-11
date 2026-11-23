@@ -38,6 +38,7 @@ export interface RoomSettings {
   category: string;
   difficulty: 'easy' | 'medium' | 'hard' | 'all';
   isPrivate: boolean;
+  password?: string; // Optional Room Password / PIN for private games
 }
 
 export interface RoomState {
