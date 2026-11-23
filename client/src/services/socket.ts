@@ -53,6 +53,7 @@ type ConnectionListener = (connected: boolean, url: string) => void;
 
 class SocketService {
   public socket: Socket | null = null;
+  public currentSecretWord: { word: string; category: string; hint?: string } | null = null;
   private url: string = getBackendUrl();
   private connectionListeners: ConnectionListener[] = [];
 
@@ -120,6 +121,14 @@ class SocketService {
       this.socket.on('connect_error', (err) => {
         console.warn(`[Socket] Connection error to ${this.url}:`, err.message);
         this.notifyConnection(false);
+      });
+
+      this.socket.on(SOCKET_EVENTS.SECRET_WORD, (data: any) => {
+        this.currentSecretWord = data;
+      });
+
+      this.socket.on(SOCKET_EVENTS.ROUND_END, () => {
+        this.currentSecretWord = null;
       });
     }
     return this.socket;
@@ -232,6 +241,14 @@ class SocketService {
   // Start game
   public startGame(roomCode: string, playerId: string): Promise<{ success: boolean; error?: string }> {
     return this.emitWithTimeout(SOCKET_EVENTS.START_GAME, { roomCode, playerId }, 15000);
+  }
+
+  // Get secret word for current drawer
+  public getSecretWord(
+    roomCode: string,
+    playerId: string
+  ): Promise<{ success: boolean; secretWord?: { word: string; category: string; hint?: string } }> {
+    return this.emitWithTimeout(SOCKET_EVENTS.GET_SECRET_WORD, { roomCode, playerId }, 5000);
   }
 
   // Submit guess

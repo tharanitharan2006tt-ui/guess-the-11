@@ -154,6 +154,24 @@ export function setupSocketHandlers(io: Server, roomManager: RoomManager) {
       if (typeof callback === 'function') callback(result);
     });
 
+    // GET SECRET WORD (Safe recovery if client mounted after initial emit)
+    socket.on(SOCKET_EVENTS.GET_SECRET_WORD, (data: { roomCode: string; playerId: string }, callback) => {
+      const room = roomManager.getRoom(data.roomCode);
+      if (room && room.currentDrawerId === data.playerId && room.currentWord) {
+        const wordPayload = {
+          word: room.currentWord.word,
+          category: room.currentWord.category,
+          hint: room.currentWord.hint
+        };
+        socket.emit(SOCKET_EVENTS.SECRET_WORD, wordPayload);
+        if (typeof callback === 'function') {
+          callback({ success: true, secretWord: wordPayload });
+        }
+      } else {
+        if (typeof callback === 'function') callback({ success: false });
+      }
+    });
+
     // DRAW STROKE
     socket.on(SOCKET_EVENTS.DRAW_START, (data: { roomCode: string; playerId: string; stroke: DrawStroke }) => {
       const room = roomManager.getRoom(data.roomCode);

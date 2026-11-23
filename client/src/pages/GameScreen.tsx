@@ -31,7 +31,9 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   currentUserId,
   onReturnHome
 }) => {
-  const [secretWord, setSecretWord] = useState<{ word: string; category: string; hint?: string } | null>(null);
+  const [secretWord, setSecretWord] = useState<{ word: string; category: string; hint?: string } | null>(
+    socketService.currentSecretWord
+  );
   const [roundResult, setRoundResult] = useState<RoundResult | null>(null);
   const [gameOverResult, setGameOverResult] = useState<FinalGameResult | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number>(roomState.roundTimeRemaining || 75);
@@ -43,6 +45,19 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
   useEffect(() => {
     const socket = socketService.getSocket();
+
+    // If drawer and secret word not yet in state, fetch immediately
+    if (isDrawer && !secretWord) {
+      if (socketService.currentSecretWord) {
+        setSecretWord(socketService.currentSecretWord);
+      } else {
+        socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
+          if (res?.success && res.secretWord) {
+            setSecretWord(res.secretWord);
+          }
+        });
+      }
+    }
 
     const handleSecretWord = (data: { word: string; category: string; hint?: string }) => {
       setSecretWord(data);
@@ -59,6 +74,12 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       setRoundResult(null);
       if (!isDrawer) {
         setSecretWord(null);
+      } else {
+        socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
+          if (res?.success && res.secretWord) {
+            setSecretWord(res.secretWord);
+          }
+        });
       }
     };
 

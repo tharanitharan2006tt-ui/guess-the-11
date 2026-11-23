@@ -265,16 +265,23 @@ export class GameRoom {
 
     this.broadcastState();
 
-    // Send secret word ONLY to the drawer
+    // Send secret word ONLY to the drawer (deliver immediately and with retries for UI mount)
     if (drawer) {
-      const drawerSocket = this.io.sockets.sockets.get(drawer.socketId);
-      if (drawerSocket) {
-        drawerSocket.emit(SOCKET_EVENTS.SECRET_WORD, {
-          word: this.currentWord.word,
-          category: this.currentWord.category,
-          hint: this.currentWord.hint
-        });
-      }
+      const sendSecretWord = () => {
+        if (!this.currentWord || !drawer) return;
+        const drawerSocket = this.io.sockets.sockets.get(drawer.socketId);
+        if (drawerSocket) {
+          drawerSocket.emit(SOCKET_EVENTS.SECRET_WORD, {
+            word: this.currentWord.word,
+            category: this.currentWord.category,
+            hint: this.currentWord.hint
+          });
+        }
+      };
+
+      sendSecretWord();
+      setTimeout(sendSecretWord, 300);
+      setTimeout(sendSecretWord, 800);
     }
 
     // Announce round start

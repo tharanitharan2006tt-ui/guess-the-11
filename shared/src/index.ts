@@ -113,6 +113,7 @@ export const SOCKET_EVENTS = {
   SUBMIT_GUESS: 'game:guess',
   SEND_CHAT: 'chat:send',
   RECONNECT: 'user:reconnect',
+  GET_SECRET_WORD: 'game:get_secret_word',
 
   // Server -> Client
   ROOM_STATE: 'room:state',
