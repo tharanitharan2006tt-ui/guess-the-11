@@ -9,7 +9,7 @@
     "client"
   ],
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=20.0.0 <23.0.0"
   },
   "scripts": {
     "install:all": "npm install --workspaces",
