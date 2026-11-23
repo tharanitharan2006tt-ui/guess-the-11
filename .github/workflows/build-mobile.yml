@@ -7,6 +7,9 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build-android:
     name: Build Android Release APK & AAB
@@ -76,6 +79,33 @@ jobs:
           path: |
             client/android/app/build/outputs/apk/release/*.apk
             client/android/app/build/outputs/bundle/release/*.aab
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: GUESS THE 11 - v1.0.0 Online Multiplayer Release
+          body: |
+            # 🎮 GUESS THE 11 - Global Multiplayer Mobile Release
+            
+            Play online with up to 11 players from any Wi-Fi or mobile network (4G/5G) anywhere in the world!
+            
+            ### 📥 Direct Downloads:
+            - **[GuessThe11-debug.apk](https://github.com/tharanitharan2006tt-ui/guess-the-11/releases/download/v1.0.0/GuessThe11-debug.apk)** (Direct Install APK - Tap to install on any Android phone)
+            - **[GuessThe11.aab](https://github.com/tharanitharan2006tt-ui/guess-the-11/releases/download/v1.0.0/GuessThe11.aab)** (Google Play Store App Bundle)
+            - **[GuessThe11-release.apk](https://github.com/tharanitharan2006tt-ui/guess-the-11/releases/download/v1.0.0/GuessThe11-release.apk)** (Release APK)
+            
+            ### 🌐 Features in this release:
+            - **Global Online Multiplayer**: Works across different Wi-Fi and mobile networks globally.
+            - **Room Password / PIN**: Lock your room with a custom password and share via WhatsApp.
+            - **11-Player Realtime Drawing & Guessing**: Canvas sync, chat, timer, leaderboard & results.
+          files: |
+            release/android/GuessThe11-debug.apk
+            release/android/GuessThe11-release.apk
+            release/android/GuessThe11.aab
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   build-ios:
     name: Prepare & Verify iOS Xcode Project
