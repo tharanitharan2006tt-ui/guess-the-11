@@ -26,13 +26,14 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
     const fetchLeaderboard = async () => {
       setLoading(true);
       try {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL || (window.location.hostname !== 'localhost' ? window.location.origin : 'http://localhost:4000');
+        const backendUrl =
+          import.meta.env.VITE_BACKEND_URL ||
+          (window.location.hostname !== 'localhost' ? window.location.origin : 'http://localhost:4000');
         const res = await fetch(`${backendUrl}/api/leaderboard`);
         const json = await res.json();
         if (json.success && json.leaderboard && json.leaderboard.length > 0) {
           setPlayers(json.leaderboard);
         } else {
-          // Default mock rankings if database has no rows yet
           setPlayers([
             { id: '1', username: 'PixelMaster', avatar: 'avatar_1', total_score: 142, games_won: 14, games_played: 22 },
             { id: '2', username: 'NeonNinja', avatar: 'avatar_2', total_score: 118, games_won: 11, games_played: 19 },
@@ -41,8 +42,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
             { id: '5', username: 'CyberGamer', avatar: 'avatar_5', total_score: 72, games_won: 5, games_played: 10 }
           ]);
         }
-      } catch (err) {
-        // Fallback
+      } catch {
         setPlayers([
           { id: '1', username: 'PixelMaster', avatar: 'avatar_1', total_score: 142, games_won: 14, games_played: 22 },
           { id: '2', username: 'NeonNinja', avatar: 'avatar_2', total_score: 118, games_won: 11, games_played: 19 },
@@ -60,23 +60,20 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-slate-900 border border-indigo-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden max-h-[85vh] flex flex-col">
-        {/* Glow */}
-        <div className="absolute -top-24 -left-24 w-48 h-48 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden max-h-[85vh] flex flex-col font-sans">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-neon-gold">
+            <div className="p-2 rounded-xl bg-amber-400 text-slate-950 shadow-sm">
               <Trophy className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold font-gaming tracking-wide text-white">
+            <h2 className="text-xl font-bold font-game tracking-wide text-white">
               GLOBAL LEADERBOARD
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -85,12 +82,12 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
         {/* List */}
         <div className="overflow-y-auto space-y-2 py-4 pr-1">
           {loading ? (
-            <div className="py-12 text-center text-slate-400 text-sm">
+            <div className="py-12 text-center text-slate-400 text-sm font-sans">
               Loading rankings...
             </div>
           ) : (
             players.map((p, index) => {
-              const avatarObj = AVATARS.find(a => a.id === p.avatar) || AVATARS[0];
+              const avatarObj = AVATARS.find((a) => a.id === p.avatar) || AVATARS[0];
               const isFirst = index === 0;
               const isSecond = index === 1;
               const isThird = index === 2;
@@ -98,37 +95,37 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
               return (
                 <div
                   key={p.id}
-                  className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                  className={`flex items-center justify-between p-3 rounded-2xl border-2 transition-all ${
                     isFirst
-                      ? 'bg-gradient-to-r from-amber-500/20 to-yellow-500/10 border-amber-500/40 shadow-neon-gold'
+                      ? 'bg-amber-400/15 border-amber-400 shadow-md'
                       : isSecond
-                      ? 'bg-slate-800/80 border-slate-400/30'
+                      ? 'bg-slate-800/80 border-slate-600'
                       : isThird
-                      ? 'bg-slate-800/60 border-amber-700/30'
+                      ? 'bg-slate-800/60 border-amber-800/60'
                       : 'bg-slate-850/50 border-slate-800'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     {/* Rank Badge */}
-                    <div className="w-7 h-7 flex items-center justify-center font-gaming font-bold text-sm">
+                    <div className="w-7 h-7 flex items-center justify-center font-game font-bold text-sm">
                       {isFirst ? (
-                        <Crown className="w-5 h-5 text-amber-400 animate-pulse" />
+                        <Crown className="w-5 h-5 text-amber-400 animate-bounce-subtle" />
                       ) : isSecond ? (
                         <Medal className="w-5 h-5 text-slate-300" />
                       ) : isThird ? (
                         <Medal className="w-5 h-5 text-amber-600" />
                       ) : (
-                        <span className="text-slate-500">#{index + 1}</span>
+                        <span className="text-slate-500 font-mono">#{index + 1}</span>
                       )}
                     </div>
 
                     {/* Avatar & Username */}
-                    <span className="text-2xl">{avatarObj.icon}</span>
+                    <span className="text-2xl select-none">{avatarObj.icon}</span>
                     <div>
-                      <p className="text-sm font-semibold text-white leading-tight">
+                      <p className="text-sm font-game font-bold text-white leading-tight">
                         {p.username}
                       </p>
-                      <p className="text-[10px] text-slate-400 leading-tight">
+                      <p className="text-[10px] text-slate-400 font-sans leading-tight">
                         {p.games_won} Wins • {p.games_played} Games
                       </p>
                     </div>
@@ -136,10 +133,10 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
 
                   {/* Score */}
                   <div className="text-right">
-                    <span className="text-base font-extrabold font-gaming text-cyan-400">
+                    <span className="text-base font-game font-bold text-amber-400">
                       {p.total_score}
                     </span>
-                    <span className="text-[10px] text-slate-400 block -mt-1">PTS</span>
+                    <span className="text-[10px] text-slate-400 block -mt-1 font-game">PTS</span>
                   </div>
                 </div>
               );

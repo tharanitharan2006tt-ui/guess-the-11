@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, User, Mail, Lock, Sparkles, Check, ArrowRight } from 'lucide-react';
-import { AuthService, UserProfile, AVATARS, isSupabaseConfigured } from '../services/supabase';
+import { X, User, Mail, Lock } from 'lucide-react';
+import { AuthService, UserProfile, AVATARS } from '../services/supabase';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -115,47 +115,65 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-slate-900 border border-indigo-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col">
-        {/* Glow */}
-        <div className="absolute -top-24 -right-24 w-48 h-48 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold font-gaming tracking-wide text-white">
-              {tab === 'profile' ? 'PLAYER PROFILE' : tab === 'login' ? 'LOGIN' : tab === 'register' ? 'CREATE ACCOUNT' : 'RESET PASSWORD'}
+            <h2 className="text-xl font-bold font-game tracking-wide text-white">
+              {tab === 'profile'
+                ? 'PLAYER PROFILE'
+                : tab === 'login'
+                ? 'LOGIN'
+                : tab === 'register'
+                ? 'CREATE ACCOUNT'
+                : 'RESET PASSWORD'}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-1 p-1 bg-slate-950/80 rounded-xl my-4 border border-slate-800 text-xs font-semibold">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-950 rounded-2xl my-4 border border-slate-800 text-xs font-game font-semibold">
           <button
-            onClick={() => { setTab('profile'); setMessage(null); }}
-            className={`flex-1 py-1.5 rounded-lg transition-all ${
-              tab === 'profile' ? 'bg-indigo-600 text-white shadow-neon-purple' : 'text-slate-400 hover:text-white'
+            onClick={() => {
+              setTab('profile');
+              setMessage(null);
+            }}
+            className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+              tab === 'profile'
+                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             Profile
           </button>
           <button
-            onClick={() => { setTab('login'); setMessage(null); }}
-            className={`flex-1 py-1.5 rounded-lg transition-all ${
-              tab === 'login' ? 'bg-indigo-600 text-white shadow-neon-purple' : 'text-slate-400 hover:text-white'
+            onClick={() => {
+              setTab('login');
+              setMessage(null);
+            }}
+            className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+              tab === 'login'
+                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             Login
           </button>
           <button
-            onClick={() => { setTab('register'); setMessage(null); }}
-            className={`flex-1 py-1.5 rounded-lg transition-all ${
-              tab === 'register' ? 'bg-indigo-600 text-white shadow-neon-purple' : 'text-slate-400 hover:text-white'
+            onClick={() => {
+              setTab('register');
+              setMessage(null);
+            }}
+            className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
+              tab === 'register'
+                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                : 'text-slate-400 hover:text-white'
             }`}
           >
             Register
@@ -179,7 +197,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'profile' && (
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Gamer Nickname
               </label>
               <div className="relative">
@@ -188,31 +206,31 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   maxLength={18}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                   required
                 />
-                <User className="w-4 h-4 text-slate-500 absolute right-3.5 top-3" />
+                <User className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-2">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-2 uppercase">
                 Choose Avatar
               </label>
-              <div className="grid grid-cols-4 gap-2.5 max-h-48 overflow-y-auto p-1">
+              <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto p-1">
                 {AVATARS.map((av) => (
                   <button
                     type="button"
                     key={av.id}
                     onClick={() => setSelectedAvatar(av.id)}
-                    className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all ${
+                    className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer ${
                       selectedAvatar === av.id
-                        ? 'bg-indigo-600/30 border-cyan-400 ring-2 ring-cyan-400 shadow-neon-blue'
+                        ? 'bg-amber-400/15 border-amber-400 shadow-md scale-105'
                         : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
                     }`}
                   >
-                    <span className="text-2xl mb-1">{av.icon}</span>
-                    <span className="text-[9px] text-slate-300 truncate w-full text-center">
+                    <span className="text-2xl mb-1 select-none">{av.icon}</span>
+                    <span className="text-[10px] font-sans text-slate-300 truncate w-full text-center">
                       {av.label}
                     </span>
                   </button>
@@ -222,7 +240,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             <button
               type="submit"
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold text-xs tracking-wider uppercase hover:from-cyan-400 hover:to-blue-500 transition-all shadow-neon-blue"
+              className="w-full py-3 rounded-2xl btn-3d-amber text-sm uppercase tracking-wide cursor-pointer"
             >
               Save Profile
             </button>
@@ -233,7 +251,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'login' && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <div className="relative">
@@ -241,20 +259,20 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                   required
                 />
-                <Mail className="w-4 h-4 text-slate-500 absolute right-3.5 top-3" />
+                <Mail className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
               </div>
             </div>
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-semibold text-slate-400">Password</label>
+                <label className="text-xs font-game font-semibold text-slate-300 uppercase">Password</label>
                 <button
                   type="button"
                   onClick={() => setTab('reset')}
-                  className="text-[11px] text-cyan-400 hover:underline"
+                  className="text-[11px] text-amber-400 hover:underline cursor-pointer"
                 >
                   Forgot?
                 </button>
@@ -264,17 +282,17 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                   required
                 />
-                <Lock className="w-4 h-4 text-slate-500 absolute right-3.5 top-3" />
+                <Lock className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
               </div>
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-semibold text-xs tracking-wider uppercase hover:from-purple-400 hover:to-indigo-500 transition-all shadow-neon-purple disabled:opacity-50"
+              className="w-full py-3 rounded-2xl btn-3d-indigo text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
             >
               {loading ? 'Logging in...' : 'Sign In'}
             </button>
@@ -285,33 +303,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'register' && (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Username
               </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Password
               </label>
               <input
@@ -319,7 +337,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 minLength={6}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                 required
               />
             </div>
@@ -327,7 +345,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold text-xs tracking-wider uppercase hover:from-emerald-400 hover:to-teal-500 transition-all shadow-neon-blue disabled:opacity-50"
+              className="w-full py-3 rounded-2xl btn-3d-mint text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Register'}
             </button>
@@ -338,14 +356,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'reset' && (
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div>
-              <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-cyan-400"
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
                 required
               />
             </div>
@@ -353,7 +371,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold text-xs tracking-wider uppercase hover:from-cyan-400 hover:to-blue-500 transition-all shadow-neon-blue disabled:opacity-50"
+              className="w-full py-3 rounded-2xl btn-3d-amber text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
             >
               {loading ? 'Sending...' : 'Send Reset Link'}
             </button>

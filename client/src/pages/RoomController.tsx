@@ -77,9 +77,9 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-game-dark flex flex-col items-center justify-center p-4">
-        <Loader2 className="w-10 h-10 text-cyan-400 animate-spin mb-4" />
-        <p className="font-gaming text-sm tracking-wider uppercase text-slate-300">
+      <div className="min-h-screen bg-[#0C101D] flex flex-col items-center justify-center p-4">
+        <Loader2 className="w-10 h-10 text-amber-400 animate-spin mb-4" />
+        <p className="font-game font-semibold text-sm tracking-wide uppercase text-slate-300">
           Connecting to Squad Arena...
         </p>
       </div>
@@ -88,18 +88,18 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
 
   if (error || !roomState) {
     return (
-      <div className="min-h-screen bg-game-dark flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full glass-card p-6 rounded-3xl border border-rose-500/30 text-center shadow-glass">
+      <div className="min-h-screen bg-[#0C101D] flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/30 p-6 rounded-3xl text-center shadow-xl">
           <ShieldAlert className="w-12 h-12 text-rose-400 mx-auto mb-3" />
-          <h2 className="text-xl font-gaming font-bold text-white mb-2 uppercase">
+          <h2 className="text-xl font-game font-bold text-white mb-2 uppercase">
             Room Entry Failed
           </h2>
-          <p className="text-xs text-slate-400 mb-6">
+          <p className="text-xs text-slate-400 mb-6 font-sans">
             {error || 'Room does not exist or has already completed.'}
           </p>
           <button
             onClick={() => navigate('/')}
-            className="w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-gaming text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 rounded-2xl btn-3d-slate text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Home

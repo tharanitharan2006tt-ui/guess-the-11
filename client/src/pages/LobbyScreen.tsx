@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { RoomState, Player } from '@guess-the-11/shared';
+import { RoomState } from '@guess-the-11/shared';
 import { AVATARS } from '../services/supabase';
 import { socketService } from '../services/socket';
 import {
@@ -11,8 +11,6 @@ import {
   Play,
   LogOut,
   Users,
-  Shield,
-  Sparkles,
   AlertCircle
 } from 'lucide-react';
 import { Share } from '@capacitor/share';
@@ -63,7 +61,6 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
         dialogTitle: 'Invite Players to Room'
       });
     } catch {
-      // Fallback to clipboard
       handleCopyLink();
     }
   };
@@ -84,74 +81,72 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
   });
 
   return (
-    <div className="min-h-screen flex flex-col bg-game-dark bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-950/40 via-slate-950 to-game-dark p-4 md:p-8">
-      {/* Top Bar */}
-      <div className="max-w-5xl mx-auto w-full flex items-center justify-between pb-6 border-b border-indigo-500/20">
+    <div className="min-h-screen flex flex-col bg-[#0C101D] text-slate-100 p-4 md:p-6">
+      {/* Top Header Bar */}
+      <div className="max-w-5xl mx-auto w-full flex items-center justify-between pb-5 border-b border-slate-800/80">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="Guess The 11" className="w-10 h-10 filter drop-shadow-[0_0_8px_rgba(6,182,212,0.6)]" />
+          <img src="/logo.svg" alt="Guess The 11" className="w-10 h-10 drop-shadow-md" />
           <div>
-            <h1 className="font-gaming font-extrabold text-lg text-white">
+            <h1 className="font-game font-bold text-xl text-white">
               ROOM LOBBY
             </h1>
-            <p className="text-xs text-cyan-400 font-semibold tracking-wider uppercase">
-              {roomState.settings.gameMode.toUpperCase()} MODE • {roomState.settings.category.toUpperCase()}
+            <p className="text-xs text-amber-400 font-sans font-semibold tracking-wider uppercase">
+              {roomState.settings.gameMode} Mode • {roomState.settings.category}
             </p>
           </div>
         </div>
 
         <button
           onClick={onLeave}
-          className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 hover:bg-rose-500 hover:text-white transition-all text-xs font-semibold"
+          className="btn-3d-slate px-3.5 py-1.5 rounded-xl flex items-center gap-1.5 text-xs text-rose-300 hover:text-white"
         >
-          <LogOut className="w-4 h-4" />
-          <span>Leave</span>
+          <LogOut className="w-4 h-4 text-rose-400" />
+          <span>Leave Room</span>
         </button>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col items-center justify-center py-6">
-        {/* Room Code Card & Sharing Header */}
-        <div className="w-full max-w-xl glass-card rounded-3xl p-6 border border-indigo-500/30 shadow-glass text-center relative overflow-hidden mb-6">
-          <div className="absolute -top-16 -right-16 w-36 h-36 bg-cyan-500/20 rounded-full blur-2xl pointer-events-none" />
-
-          <span className="text-xs font-gaming font-bold uppercase tracking-widest text-slate-400">
+        {/* Room Code & Invite Card */}
+        <div className="w-full max-w-lg game-card-tactile p-6 text-center mb-6 relative overflow-hidden">
+          <span className="text-xs font-game font-semibold uppercase tracking-wider text-slate-400">
             Room Code
           </span>
           <div className="flex items-center justify-center gap-3 my-2">
-            <span className="font-mono text-4xl sm:text-5xl font-black tracking-widest text-transparent bg-gradient-to-r from-cyan-400 via-purple-300 to-pink-400 bg-clip-text select-all">
+            <span className="font-mono text-4xl sm:text-5xl font-black tracking-widest text-white select-all">
               {roomState.code}
             </span>
             <button
               onClick={handleCopyLink}
-              className="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-cyan-400 hover:bg-slate-700 transition-all border border-slate-700 shadow-sm"
+              className="p-2.5 rounded-xl bg-slate-800 border-2 border-slate-700 hover:border-amber-400/60 text-slate-200 transition-all shadow-sm"
               title="Copy Room Link"
             >
               {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
             </button>
           </div>
 
-          {/* Player Count Display */}
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-900 border border-indigo-500/30 text-xs font-bold text-white mb-4">
-            <Users className="w-4 h-4 text-cyan-400" />
-            <span className="tracking-wider uppercase text-slate-300">WAITING FOR PLAYERS:</span>
-            <span className="text-cyan-400 text-sm font-gaming">{playerCount} / {maxPlayers}</span>
+          {/* Waiting Status Badge */}
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-800/90 border border-slate-700/80 text-xs font-game font-semibold text-white mb-4">
+            <Users className="w-4 h-4 text-amber-400" />
+            <span className="text-slate-300">WAITING FOR PLAYERS:</span>
+            <span className="text-amber-400 text-sm font-bold">{playerCount} / {maxPlayers}</span>
           </div>
 
-          {/* Share Buttons */}
-          <div className="grid grid-cols-2 gap-2.5 max-w-sm mx-auto">
+          {/* Share Actions */}
+          <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
             <button
               onClick={handleWhatsAppShare}
-              className="py-2.5 px-3 rounded-xl bg-emerald-600/20 hover:bg-emerald-600/30 text-emerald-300 border border-emerald-500/40 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+              className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white border-b-4 border-emerald-800 active:border-b-0 active:translate-y-1 transition-all text-xs font-game font-semibold flex items-center justify-center gap-2 shadow-sm"
             >
-              <MessageCircle className="w-4 h-4 fill-current text-emerald-400" />
+              <MessageCircle className="w-4 h-4 fill-current" />
               WhatsApp
             </button>
 
             <button
               onClick={handleNativeShare}
-              className="py-2.5 px-3 rounded-xl bg-cyan-600/20 hover:bg-cyan-600/30 text-cyan-300 border border-cyan-500/40 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+              className="py-2.5 px-3 rounded-xl bg-sky-600 hover:bg-sky-500 text-white border-b-4 border-sky-800 active:border-b-0 active:translate-y-1 transition-all text-xs font-game font-semibold flex items-center justify-center gap-2 shadow-sm"
             >
-              <Share2 className="w-4 h-4 text-cyan-400" />
+              <Share2 className="w-4 h-4" />
               Invite Friends
             </button>
           </div>
@@ -169,39 +164,45 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
                 return (
                   <div
                     key={player.id}
-                    className={`p-3.5 rounded-2xl glass-card flex flex-col items-center justify-center text-center relative border transition-all animate-in zoom-in-95 duration-200 ${
+                    className={`p-3.5 rounded-2xl flex flex-col items-center justify-center text-center relative border-2 transition-all duration-200 ${
                       isMe
-                        ? 'border-cyan-400 bg-cyan-950/20 shadow-neon-blue'
+                        ? 'border-amber-400 bg-amber-500/10 shadow-lg shadow-amber-950/20'
                         : isThisPlayerHost
-                        ? 'border-amber-400/50 bg-amber-950/10'
-                        : 'border-indigo-500/30 bg-slate-900/60'
+                        ? 'border-amber-500/50 bg-slate-800/80'
+                        : 'border-slate-700/70 bg-slate-800/60'
                     }`}
                   >
                     {/* Host crown badge */}
                     {isThisPlayerHost && (
-                      <div className="absolute top-2 right-2 p-1 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-neon-gold">
+                      <div className="absolute top-2 right-2 p-1 rounded-full bg-amber-400 text-slate-900 shadow-sm" title="Room Host">
                         <Crown className="w-3.5 h-3.5 fill-current" />
                       </div>
                     )}
 
-                    {/* Slot badge */}
-                    <div className="absolute top-2 left-2 text-[10px] font-mono font-bold text-slate-500">
-                      #{slotNumber}
+                    {/* Slot number badge */}
+                    <div className="absolute top-2 left-2 text-[10px] font-mono font-bold text-slate-400">
+                      #{String(slotNumber).padStart(2, '0')}
                     </div>
 
                     {/* Avatar */}
-                    <span className="text-4xl my-2 filter drop-shadow-[0_0_8px_rgba(255,255,255,0.2)]">
+                    <span className="text-4xl my-2 select-none filter drop-shadow-sm">
                       {avatarObj.icon}
                     </span>
 
-                    {/* Name */}
-                    <p className="text-xs font-bold text-white truncate max-w-full leading-tight">
+                    {/* Username */}
+                    <p className="text-xs font-game font-bold text-white truncate max-w-full leading-tight">
                       {player.username}
                     </p>
 
                     {/* Subtext */}
-                    <span className="text-[10px] text-cyan-400 font-medium mt-0.5">
-                      {isMe ? '(You)' : isThisPlayerHost ? 'Host' : 'Ready'}
+                    <span className={`text-[10px] font-sans font-semibold mt-1 px-2 py-0.5 rounded-full ${
+                      isMe
+                        ? 'bg-amber-400/20 text-amber-300'
+                        : isThisPlayerHost
+                        ? 'bg-amber-500/20 text-amber-300'
+                        : 'bg-emerald-500/20 text-emerald-300'
+                    }`}>
+                      {isMe ? 'You' : isThisPlayerHost ? 'Host' : 'Ready'}
                     </span>
                   </div>
                 );
@@ -211,15 +212,15 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               return (
                 <div
                   key={`empty_${slotNumber}`}
-                  className="p-3.5 rounded-2xl border-2 border-dashed border-slate-800/80 bg-slate-950/30 flex flex-col items-center justify-center text-center relative opacity-60"
+                  className="p-3.5 rounded-2xl border-2 border-dashed border-slate-800 bg-slate-900/30 flex flex-col items-center justify-center text-center relative opacity-50"
                 >
                   <div className="absolute top-2 left-2 text-[10px] font-mono text-slate-600">
-                    #{slotNumber}
+                    #{String(slotNumber).padStart(2, '0')}
                   </div>
-                  <div className="w-10 h-10 rounded-full border border-slate-700/60 flex items-center justify-center my-2 text-slate-600 text-xs font-semibold">
+                  <div className="w-10 h-10 rounded-full border border-slate-700/60 flex items-center justify-center my-2 text-slate-500 text-xs font-bold">
                     ?
                   </div>
-                  <span className="text-[11px] text-slate-500 font-medium">Empty Slot</span>
+                  <span className="text-[11px] font-sans text-slate-500">Empty Slot</span>
                 </div>
               );
             })}
@@ -240,27 +241,27 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               <button
                 onClick={handleStartGame}
                 disabled={!canStart}
-                className={`w-full py-4 rounded-2xl font-gaming font-extrabold text-base tracking-wider uppercase transition-all duration-300 flex items-center justify-center gap-2 shadow-lg ${
+                className={`w-full py-4 rounded-2xl font-game font-bold text-base tracking-wide flex items-center justify-center gap-2 cursor-pointer ${
                   canStart
-                    ? 'bg-gradient-to-r from-emerald-500 via-teal-600 to-cyan-600 text-white hover:scale-105 active:scale-95 shadow-neon-blue'
-                    : 'bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700'
+                    ? 'btn-3d-mint text-slate-950'
+                    : 'bg-slate-800/80 text-slate-500 cursor-not-allowed border-2 border-slate-700/60 opacity-60'
                 }`}
               >
                 <Play className="w-5 h-5 fill-current" />
                 Start Game ({playerCount}/{minPlayers})
               </button>
               {!canStart && (
-                <p className="text-xs text-slate-400 mt-2">
+                <p className="text-xs text-slate-400 font-sans mt-2">
                   {roomState.settings.gameMode === 'standard'
-                    ? 'Standard mode requires all 11 players before the game can begin.'
-                    : `Need at least ${minPlayers} players to begin practice game.`}
+                    ? 'Standard mode requires all 11 players to start.'
+                    : `Need at least ${minPlayers} players to start practice mode.`}
                 </p>
               )}
             </div>
           ) : (
-            <div className="p-4 rounded-2xl glass-card border border-indigo-500/30 flex items-center justify-center gap-3">
-              <div className="w-3 h-3 rounded-full bg-cyan-400 animate-ping" />
-              <span className="text-xs font-semibold text-slate-300">
+            <div className="p-4 rounded-2xl game-card-tactile flex items-center justify-center gap-3">
+              <div className="w-3 h-3 rounded-full bg-amber-400 animate-ping" />
+              <span className="text-xs font-game font-semibold text-slate-200">
                 Waiting for host to start the game...
               </span>
             </div>

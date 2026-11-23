@@ -42,23 +42,20 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-slate-900 border border-indigo-500/30 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col">
-        {/* Glow */}
-        <div className="absolute -top-20 -left-20 w-44 h-44 bg-purple-500/20 rounded-full blur-3xl pointer-events-none" />
-
+      <div className="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-neon-purple">
+            <div className="p-2 rounded-xl bg-indigo-500 text-white shadow-sm">
               <LogIn className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold font-gaming tracking-wide text-white">
+            <h2 className="text-xl font-bold font-game tracking-wide text-white">
               JOIN ROOM
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -66,7 +63,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 mb-1.5">
+            <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
               Enter 6-Character Room Code or Paste Link
             </label>
             <div className="relative">
@@ -79,7 +76,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
                 }}
                 placeholder="e.g. AB12CD"
                 maxLength={40}
-                className="w-full bg-slate-950 border border-slate-700 rounded-xl px-4 py-3 text-white font-mono text-center tracking-widest text-lg font-bold uppercase focus:outline-none focus:border-cyan-400"
+                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-white font-mono text-center tracking-widest text-xl font-black uppercase focus:outline-none focus:border-indigo-400"
                 autoFocus
                 required
               />
@@ -95,10 +92,10 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
 
           <button
             type="submit"
-            className="w-full py-3 rounded-xl bg-gradient-to-r from-purple-500 via-indigo-600 to-blue-600 text-white font-gaming font-bold text-sm tracking-wider uppercase hover:opacity-95 transition-all shadow-neon-purple flex items-center justify-center gap-2"
+            className="w-full py-3.5 rounded-2xl btn-3d-indigo text-white flex items-center justify-center gap-2 text-sm uppercase tracking-wide cursor-pointer"
           >
             <LogIn className="w-4 h-4" />
-            Enter Lobby
+            Enter Room
           </button>
         </form>
       </div>

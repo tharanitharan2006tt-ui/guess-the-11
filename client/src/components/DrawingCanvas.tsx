@@ -7,8 +7,7 @@ import {
   Undo2,
   Redo2,
   Trash2,
-  Lock,
-  Palette
+  Lock
 } from 'lucide-react';
 
 interface DrawingCanvasProps {
@@ -18,22 +17,26 @@ interface DrawingCanvasProps {
 }
 
 const COLORS = [
-  '#00F0FF', // Electric Blue
-  '#C084FC', // Neon Purple
-  '#F43F5E', // Hot Pink
-  '#10B981', // Emerald Neon
-  '#F59E0B', // Sun Gold
-  '#FFFFFF', // Pure White
   '#000000', // Deep Black
-  '#6366F1'  // Indigo
+  '#64748B', // Charcoal Slate
+  '#EF4444', // Warm Red
+  '#F97316', // Sunset Orange
+  '#EAB308', // Sunshine Yellow
+  '#22C55E', // Forest Green
+  '#06B6D4', // Bright Cyan
+  '#3B82F6', // Royal Blue
+  '#8B5CF6', // Vivid Purple
+  '#EC4899', // Bubblegum Pink
+  '#854D0E', // Wood Brown
+  '#FFFFFF'  // Pure White
 ];
 
-const BRUSH_SIZES = [3, 6, 12, 24];
+const BRUSH_SIZES = [3, 6, 12, 22];
 
 export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId, isDrawer }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [tool, setTool] = useState<DrawTool>('brush');
-  const [color, setColor] = useState<string>('#00F0FF');
+  const [color, setColor] = useState<string>('#000000');
   const [size, setSize] = useState<number>(6);
   const [isDrawing, setIsDrawing] = useState<boolean>(false);
   const [currentStroke, setCurrentStroke] = useState<DrawStroke | null>(null);
@@ -52,8 +55,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Draw background
-    ctx.fillStyle = '#0F172A';
+    // Draw clean paper background
+    ctx.fillStyle = '#FFFFFF';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Render strokes
@@ -64,10 +67,9 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.lineWidth = stroke.size;
-      ctx.strokeStyle = stroke.tool === 'eraser' ? '#0F172A' : stroke.color;
+      ctx.strokeStyle = stroke.tool === 'eraser' ? '#FFFFFF' : stroke.color;
 
       const first = stroke.points[0];
-      // Convert normalized (0-1) coordinates to canvas pixel space
       ctx.moveTo(first.x * canvas.width, first.y * canvas.height);
 
       for (let i = 1; i < stroke.points.length; i++) {
@@ -110,7 +112,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
       if (canvas) {
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          ctx.fillStyle = '#0F172A';
+          ctx.fillStyle = '#FFFFFF';
           ctx.fillRect(0, 0, canvas.width, canvas.height);
         }
       }
@@ -142,14 +144,16 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
     if (canvas) {
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.fillStyle = '#0F172A';
+        ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
     }
   }, []);
 
-  // Helper to extract normalized coordinates
-  const getCoordinates = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>): DrawPoint | null => {
+  // Coordinate normalizer (0 to 1)
+  const getCoordinates = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ): DrawPoint | null => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
 
@@ -166,20 +170,26 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
       clientY = e.clientY;
     }
 
-    const x = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
-    const y = Math.max(0, Math.min(1, (clientY - rect.top) / rect.height));
+    const x = (clientX - rect.left) / rect.width;
+    const y = (clientY - rect.top) / rect.height;
 
-    return { x, y };
+    return {
+      x: Math.max(0, Math.min(1, x)),
+      y: Math.max(0, Math.min(1, y))
+    };
   };
 
-  const handlePointerDown = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  // Drawing event handlers
+  const handlePointerDown = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawer) return;
     const pt = getCoordinates(e);
     if (!pt) return;
 
     setIsDrawing(true);
     const newStroke: DrawStroke = {
-      id: `stroke_${Date.now()}_${Math.random()}`,
+      id: `${playerId}_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       tool,
       color,
       size,
@@ -187,7 +197,6 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
     };
     setCurrentStroke(newStroke);
 
-    // Live preview
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -196,20 +205,21 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
         ctx.lineCap = 'round';
         ctx.lineJoin = 'round';
         ctx.lineWidth = size;
-        ctx.strokeStyle = tool === 'eraser' ? '#0F172A' : color;
+        ctx.strokeStyle = tool === 'eraser' ? '#FFFFFF' : color;
         ctx.moveTo(pt.x * canvas.width, pt.y * canvas.height);
       }
     }
   };
 
-  const handlePointerMove = (e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>) => {
+  const handlePointerMove = (
+    e: React.MouseEvent<HTMLCanvasElement> | React.TouchEvent<HTMLCanvasElement>
+  ) => {
     if (!isDrawer || !isDrawing || !currentStroke) return;
     const pt = getCoordinates(e);
     if (!pt) return;
 
     currentStroke.points.push(pt);
 
-    // Draw live segment
     const canvas = canvasRef.current;
     if (canvas) {
       const ctx = canvas.getContext('2d');
@@ -225,9 +235,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
     setIsDrawing(false);
 
     if (currentStroke.points.length > 0) {
-      // Send completed stroke to server
       socketService.emitDrawStroke(roomCode, playerId, currentStroke);
-
       setStrokes((prev) => [...prev, currentStroke]);
       setUndoneStrokes([]);
     }
@@ -263,7 +271,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
     if (canvas) {
       const ctx = canvas.getContext('2d');
       if (ctx) {
-        ctx.fillStyle = '#0F172A';
+        ctx.fillStyle = '#FFFFFF';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       }
     }
@@ -271,8 +279,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
 
   return (
     <div className="flex flex-col w-full h-full select-none">
-      {/* Canvas Container with Glass Frame */}
-      <div className="relative w-full aspect-[4/3] max-h-[55vh] md:max-h-[65vh] rounded-2xl overflow-hidden border-2 border-indigo-500/30 shadow-glass bg-slate-900 touch-none">
+      {/* Canvas Paper Container */}
+      <div className="relative w-full aspect-[4/3] max-h-[55vh] md:max-h-[62vh] rounded-3xl overflow-hidden border-4 border-slate-700/80 shadow-2xl bg-white touch-none">
         <canvas
           ref={canvasRef}
           width={800}
@@ -289,8 +297,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
 
         {/* Non-drawer lock indicator */}
         {!isDrawer && (
-          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/80 backdrop-blur-md border border-slate-700/60 text-xs font-medium text-slate-400">
-            <Lock className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700/70 text-xs font-game font-semibold text-slate-300 shadow-md">
+            <Lock className="w-3.5 h-3.5 text-amber-400" />
             <span>Guesser View</span>
           </div>
         )}
@@ -298,14 +306,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
 
       {/* Drawer Control Toolbar */}
       {isDrawer && (
-        <div className="mt-3 p-3 rounded-2xl glass-card flex flex-wrap items-center justify-between gap-3 shadow-glass animate-in fade-in slide-in-from-bottom-2 duration-300">
+        <div className="mt-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 flex flex-wrap items-center justify-between gap-2.5 shadow-xl">
           {/* Tool switch: Brush vs Eraser */}
-          <div className="flex items-center gap-1 bg-slate-800/80 p-1 rounded-xl border border-slate-700/50">
+          <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700">
             <button
               onClick={() => setTool('brush')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'brush'
-                  ? 'bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-neon-blue'
+                  ? 'btn-3d-amber text-slate-950 font-bold'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Paintbrush"
@@ -316,7 +324,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
               onClick={() => setTool('eraser')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'eraser'
-                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-neon-purple'
+                  ? 'btn-3d-coral text-white font-bold'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Eraser"
@@ -325,15 +333,17 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             </button>
           </div>
 
-          {/* Color Palette */}
+          {/* Color Palette (12 Human Studio Colors) */}
           {tool === 'brush' && (
             <div className="flex items-center gap-1.5 overflow-x-auto py-1">
               {COLORS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setColor(c)}
-                  className={`w-6 h-6 rounded-full transition-transform ${
-                    color === c ? 'scale-125 ring-2 ring-white ring-offset-2 ring-offset-slate-900' : 'hover:scale-110'
+                  className={`w-6 h-6 rounded-full transition-transform border border-slate-600/40 ${
+                    color === c
+                      ? 'scale-125 ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-900'
+                      : 'hover:scale-110'
                   }`}
                   style={{ backgroundColor: c }}
                   title={c}
@@ -343,18 +353,19 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
           )}
 
           {/* Brush Sizes */}
-          <div className="flex items-center gap-1.5 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/50">
+          <div className="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
             {BRUSH_SIZES.map((sz) => (
               <button
                 key={sz}
                 onClick={() => setSize(sz)}
                 className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
-                  size === sz ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                  size === sz ? 'bg-amber-400 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
                 }`}
+                title={`Size ${sz}`}
               >
                 <div
                   className="rounded-full bg-current"
-                  style={{ width: Math.max(3, sz / 2), height: Math.max(3, sz / 2) }}
+                  style={{ width: Math.max(3, sz / 2.5), height: Math.max(3, sz / 2.5) }}
                 />
               </button>
             ))}
@@ -365,7 +376,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleUndo}
               disabled={strokes.length === 0}
-              className="p-2 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 transition-all"
+              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 transition-all"
               title="Undo"
             >
               <Undo2 className="w-4 h-4" />
@@ -373,14 +384,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleRedo}
               disabled={undoneStrokes.length === 0}
-              className="p-2 rounded-lg bg-slate-800/80 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700/50 transition-all"
+              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 transition-all"
               title="Redo"
             >
               <Redo2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleClear}
-              className="p-2 rounded-lg bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white border border-rose-500/30 transition-all"
+              className="p-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white border border-rose-500/40 transition-all"
               title="Clear Canvas"
             >
               <Trash2 className="w-4 h-4" />
