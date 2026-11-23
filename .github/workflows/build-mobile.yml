@@ -47,29 +47,31 @@ jobs:
       - name: Grant Execute Permission to Gradlew
         run: chmod +x client/android/gradlew
 
-      - name: Build Android Release APK & Bundle
+      - name: Build Android APKs & Bundle
         run: |
           cd client/android
-          ./gradlew assembleRelease
-          ./gradlew bundleRelease
+          ./gradlew assembleDebug assembleRelease bundleRelease
 
       - name: Organize Release Artifacts
         run: |
           mkdir -p release/android
-          cp client/android/app/build/outputs/apk/release/app-release-unsigned.apk release/android/GuessThe11.apk || cp client/android/app/build/outputs/apk/debug/app-debug.apk release/android/GuessThe11.apk
+          cp client/android/app/build/outputs/apk/debug/app-debug.apk release/android/GuessThe11-debug.apk || true
+          cp client/android/app/build/outputs/apk/release/app-release-unsigned.apk release/android/GuessThe11-release.apk || true
           cp client/android/app/build/outputs/bundle/release/app-release.aab release/android/GuessThe11.aab || true
 
-      - name: Upload Android APK
+      - name: Upload Android Ready-to-Install APK
         uses: actions/upload-artifact@v4
         with:
-          name: GuessThe11-Android-APK
-          path: client/android/app/build/outputs/apk/**/*.apk
+          name: GuessThe11-Direct-Install-APK
+          path: client/android/app/build/outputs/apk/debug/*.apk
 
-      - name: Upload Android AAB
+      - name: Upload Android Release APK & AAB
         uses: actions/upload-artifact@v4
         with:
-          name: GuessThe11-Android-AAB
-          path: client/android/app/build/outputs/bundle/**/*.aab
+          name: GuessThe11-GooglePlay-AAB-and-Release
+          path: |
+            client/android/app/build/outputs/apk/release/*.apk
+            client/android/app/build/outputs/bundle/release/*.aab
 
   build-ios:
     name: Prepare & Verify iOS Xcode Project
