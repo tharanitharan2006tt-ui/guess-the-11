@@ -17,6 +17,7 @@ import {
   Crown,
   Medal,
   RotateCcw,
+  RefreshCw,
   Home
 } from 'lucide-react';
 
@@ -43,24 +44,59 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   const me = roomState.players.find((p) => p.id === currentUserId);
   const hasGuessedThisRound = me?.hasGuessedThisRound || false;
 
+  const fetchSecretWord = () => {
+    if (socketService.currentSecretWord) {
+      setSecretWord(socketService.currentSecretWord);
+      return;
+    }
+    socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
+      if (res?.success && res.secretWord) {
+        setSecretWord(res.secretWord);
+      }
+    });
+  };
+
   useEffect(() => {
     const socket = socketService.getSocket();
+    let retryTimer: any = null;
 
-    // If drawer and secret word not yet in state, fetch immediately
-    if (isDrawer && !secretWord) {
+    // If drawer and secret word not yet in state, fetch immediately and start auto-retry
+    if (isDrawer) {
       if (socketService.currentSecretWord) {
         setSecretWord(socketService.currentSecretWord);
       } else {
-        socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
-          if (res?.success && res.secretWord) {
-            setSecretWord(res.secretWord);
-          }
-        });
+        fetchSecretWord();
       }
+
+      // Auto-retry polling loop every 1s until secret word is loaded
+      retryTimer = setInterval(() => {
+        setSecretWord((prev) => {
+          if (prev) {
+            if (retryTimer) clearInterval(retryTimer);
+            return prev;
+          }
+          if (socketService.currentSecretWord) {
+            if (retryTimer) clearInterval(retryTimer);
+            return socketService.currentSecretWord;
+          }
+          socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
+            if (res?.success && res.secretWord) {
+              setSecretWord(res.secretWord);
+              if (retryTimer) clearInterval(retryTimer);
+            }
+          });
+          return prev;
+        });
+      }, 1000);
+    } else {
+      setSecretWord(null);
     }
 
     const handleSecretWord = (data: { word: string; category: string; hint?: string }) => {
-      setSecretWord(data);
+      if (data && data.word) {
+        setSecretWord(data);
+        if (retryTimer) clearInterval(retryTimer);
+      }
     };
 
     const handleRoundTick = (data: { timeRemaining: number }) => {
@@ -70,16 +106,14 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       }
     };
 
-    const handleRoundStart = () => {
+    const handleRoundStart = (data?: { drawerId?: string }) => {
       setRoundResult(null);
-      if (!isDrawer) {
+      const isMeDrawer = data?.drawerId ? data.drawerId === currentUserId : isDrawer;
+      if (!isMeDrawer) {
         setSecretWord(null);
       } else {
-        socketService.getSecretWord(roomState.code, currentUserId).then((res) => {
-          if (res?.success && res.secretWord) {
-            setSecretWord(res.secretWord);
-          }
-        });
+        setSecretWord(null);
+        fetchSecretWord();
       }
     };
 
@@ -113,13 +147,14 @@ export const GameScreen: React.FC<GameScreenProps> = ({
     socket.on(SOCKET_EVENTS.GAME_OVER, handleGameOver);
 
     return () => {
+      if (retryTimer) clearInterval(retryTimer);
       socket.off(SOCKET_EVENTS.SECRET_WORD, handleSecretWord);
       socket.off(SOCKET_EVENTS.ROUND_TICK, handleRoundTick);
       socket.off(SOCKET_EVENTS.ROUND_START, handleRoundStart);
       socket.off(SOCKET_EVENTS.ROUND_END, handleRoundEnd);
       socket.off(SOCKET_EVENTS.GAME_OVER, handleGameOver);
     };
-  }, [isDrawer]);
+  }, [isDrawer, roomState.code, currentUserId, roomState.currentRound]);
 
   // Host resets game to play again
   const handlePlayAgain = () => {
@@ -167,9 +202,21 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                 <span>🎨</span> YOUR SECRET WORD TO DRAW:
               </span>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="text-xl md:text-2xl font-black text-white tracking-wide bg-gradient-to-r from-white via-indigo-100 to-[#28C7E8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">
-                  {secretWord ? secretWord.word : 'Loading...'}
-                </span>
+                {secretWord ? (
+                  <span className="text-xl md:text-2xl font-black text-white tracking-wide bg-gradient-to-r from-white via-indigo-100 to-[#28C7E8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">
+                    {secretWord.word}
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => fetchSecretWord()}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-semibold hover:bg-amber-500/25 transition-all cursor-pointer animate-pulse"
+                    title="Tap to fetch word immediately"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Loading word... (Tap to retry)</span>
+                  </button>
+                )}
                 {secretWord?.hint && (
                   <span className="text-xs text-[#929BB3] hidden sm:inline" title={secretWord.hint}>
                     ({secretWord.hint})

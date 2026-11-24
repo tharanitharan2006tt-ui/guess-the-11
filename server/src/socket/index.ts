@@ -156,8 +156,18 @@ export function setupSocketHandlers(io: Server, roomManager: RoomManager) {
 
     // GET SECRET WORD (Safe recovery if client mounted after initial emit)
     socket.on(SOCKET_EVENTS.GET_SECRET_WORD, (data: { roomCode: string; playerId: string }, callback) => {
-      const room = roomManager.getRoom(data.roomCode);
-      if (room && room.currentDrawerId === data.playerId && room.currentWord) {
+      const code = (data?.roomCode || '').trim().toUpperCase();
+      const playerId = data?.playerId;
+      const room = roomManager.getRoom(code);
+      if (room && room.currentDrawerId === playerId && room.currentWord) {
+        // Ensure drawer player socket mapping is fresh
+        const drawerPlayer = room.players.get(playerId);
+        if (drawerPlayer) {
+          drawerPlayer.socketId = socket.id;
+          drawerPlayer.isConnected = true;
+        }
+        roomManager.registerSocket(socket.id, code, playerId);
+
         const wordPayload = {
           word: room.currentWord.word,
           category: room.currentWord.category,

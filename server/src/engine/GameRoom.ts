@@ -282,6 +282,8 @@ export class GameRoom {
       sendSecretWord();
       setTimeout(sendSecretWord, 300);
       setTimeout(sendSecretWord, 800);
+      setTimeout(sendSecretWord, 1600);
+      setTimeout(sendSecretWord, 2600);
     }
 
     // Announce round start

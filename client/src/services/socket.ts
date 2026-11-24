@@ -35,12 +35,10 @@ export const getBackendUrl = (): string => {
     return import.meta.env.VITE_BACKEND_URL.replace(/\/+$/, '');
   }
 
-  // 3. If running in a web browser on a remote domain/Vercel (and NOT Capacitor mobile), use same origin
+  // 3. If running directly on the backend server domain itself (e.g. onrender.com)
   if (
     typeof window !== 'undefined' &&
-    window.location.hostname !== 'localhost' &&
-    !window.location.hostname.includes('127.0.0.1') &&
-    !window.location.protocol.includes('capacitor')
+    window.location.hostname.includes('onrender.com')
   ) {
     return window.location.origin;
   }
@@ -125,6 +123,10 @@ class SocketService {
 
       this.socket.on(SOCKET_EVENTS.SECRET_WORD, (data: any) => {
         this.currentSecretWord = data;
+      });
+
+      this.socket.on(SOCKET_EVENTS.ROUND_START, () => {
+        this.currentSecretWord = null;
       });
 
       this.socket.on(SOCKET_EVENTS.ROUND_END, () => {

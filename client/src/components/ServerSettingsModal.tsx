@@ -245,6 +245,23 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
               Save & Connect
             </button>
           </div>
+
+          {/* Quick Reset */}
+          <div className="flex justify-center pt-1">
+            <button
+              type="button"
+              onClick={() => {
+                const cloudUrl = 'https://guess-the-11-backend.onrender.com';
+                setInputUrl(cloudUrl);
+                setCurrentUrl(cloudUrl);
+                handleTestConnection(cloudUrl);
+                socketService.setServerUrl(cloudUrl);
+              }}
+              className="text-[11px] text-[#A78BFA] hover:text-white underline transition-colors cursor-pointer"
+            >
+              Reset to 24/7 Global Cloud Server (Render)
+            </button>
+          </div>
         </div>
       </div>
     </div>
