@@ -114,12 +114,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="w-full max-w-md glass-modal border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center gap-2">
-            <h2 className="text-xl font-bold font-game tracking-wide text-white">
+            <h2 className="text-xl font-bold tracking-wide text-white">
               {tab === 'profile'
                 ? 'PLAYER PROFILE'
                 : tab === 'login'
@@ -131,14 +131,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Selector */}
-        <div className="flex items-center gap-1.5 p-1 bg-slate-950 rounded-2xl my-4 border border-slate-800 text-xs font-game font-semibold">
+        <div className="flex items-center gap-1.5 p-1 bg-white/[0.04] rounded-2xl my-4 border border-white/[0.08] text-xs font-semibold">
           <button
             onClick={() => {
               setTab('profile');
@@ -146,7 +146,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             }}
             className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
               tab === 'profile'
-                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                ? 'bg-indigo-500 text-white shadow-md font-bold'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -159,7 +159,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             }}
             className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
               tab === 'login'
-                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                ? 'bg-indigo-500 text-white shadow-md font-bold'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -172,7 +172,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             }}
             className={`flex-1 py-2 rounded-xl transition-all cursor-pointer ${
               tab === 'register'
-                ? 'bg-amber-400 text-slate-950 shadow-sm font-bold'
+                ? 'bg-indigo-500 text-white shadow-md font-bold'
                 : 'text-slate-400 hover:text-white'
             }`}
           >
@@ -185,8 +185,8 @@ export const AuthModal: React.FC<AuthModalProps> = ({
           <div
             className={`p-3 rounded-xl text-xs font-semibold mb-3 ${
               message.type === 'error'
-                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
-                : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30'
+                ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+                : 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
             }`}
           >
             {message.text}
@@ -197,7 +197,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'profile' && (
           <form onSubmit={handleSaveProfile} className="space-y-4">
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Gamer Nickname
               </label>
               <div className="relative">
@@ -206,7 +206,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   maxLength={18}
-                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                  className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                   required
                 />
                 <User className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
@@ -214,7 +214,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             </div>
 
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-2 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-2 uppercase">
                 Choose Avatar
               </label>
               <div className="grid grid-cols-4 gap-2 max-h-48 overflow-y-auto p-1">
@@ -223,10 +223,10 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                     type="button"
                     key={av.id}
                     onClick={() => setSelectedAvatar(av.id)}
-                    className={`flex flex-col items-center justify-center p-2 rounded-2xl border-2 transition-all cursor-pointer ${
+                    className={`flex flex-col items-center justify-center p-2 rounded-2xl border transition-all cursor-pointer ${
                       selectedAvatar === av.id
-                        ? 'bg-amber-400/15 border-amber-400 shadow-md scale-105'
-                        : 'bg-slate-950/60 border-slate-800 hover:border-slate-700'
+                        ? 'bg-indigo-500/20 border-indigo-500/60 shadow-md scale-105'
+                        : 'bg-white/[0.03] border-white/[0.08] hover:border-white/[0.15]'
                     }`}
                   >
                     <span className="text-2xl mb-1 select-none">{av.icon}</span>
@@ -240,7 +240,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             <button
               type="submit"
-              className="w-full py-3 rounded-2xl btn-3d-amber text-sm uppercase tracking-wide cursor-pointer"
+              className="btn-glass-primary w-full py-3 rounded-2xl text-sm uppercase tracking-wide cursor-pointer font-semibold text-white"
             >
               Save Profile
             </button>
@@ -251,7 +251,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'login' && (
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <div className="relative">
@@ -259,7 +259,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                  className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                   required
                 />
                 <Mail className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
@@ -268,11 +268,11 @@ export const AuthModal: React.FC<AuthModalProps> = ({
 
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <label className="text-xs font-game font-semibold text-slate-300 uppercase">Password</label>
+                <label className="text-xs font-semibold text-slate-300 uppercase">Password</label>
                 <button
                   type="button"
                   onClick={() => setTab('reset')}
-                  className="text-[11px] text-amber-400 hover:underline cursor-pointer"
+                  className="text-[11px] text-indigo-400 hover:underline cursor-pointer"
                 >
                   Forgot?
                 </button>
@@ -282,7 +282,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                  className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                   required
                 />
                 <Lock className="w-4 h-4 text-slate-500 absolute right-3.5 top-3.5" />
@@ -292,7 +292,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-2xl btn-3d-indigo text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
+              className="btn-glass-primary w-full py-3 rounded-2xl text-sm uppercase tracking-wide cursor-pointer font-semibold text-white disabled:opacity-50"
             >
               {loading ? 'Logging in...' : 'Sign In'}
             </button>
@@ -303,33 +303,33 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'register' && (
           <form onSubmit={handleRegister} className="space-y-4">
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Username
               </label>
               <input
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Password
               </label>
               <input
@@ -337,7 +337,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 minLength={6}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                 required
               />
             </div>
@@ -345,7 +345,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-2xl btn-3d-mint text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
+              className="btn-glass-emerald w-full py-3 rounded-2xl text-sm uppercase tracking-wide cursor-pointer font-semibold text-white disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Register'}
             </button>
@@ -356,14 +356,14 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         {tab === 'reset' && (
           <form onSubmit={handleResetPassword} className="space-y-4">
             <div>
-              <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
                 Email Address
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                className="w-full glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                 required
               />
             </div>
@@ -371,7 +371,7 @@ export const AuthModal: React.FC<AuthModalProps> = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 rounded-2xl btn-3d-amber text-sm uppercase tracking-wide cursor-pointer disabled:opacity-50"
+              className="btn-glass-primary w-full py-3 rounded-2xl text-sm uppercase tracking-wide cursor-pointer font-semibold text-white disabled:opacity-50"
             >
               {loading ? 'Sending...' : 'Send Reset Link'}
             </button>

@@ -97,9 +97,12 @@ jobs:
             - **[GuessThe11-release.apk](https://github.com/tharanitharan2006tt-ui/guess-the-11/releases/download/v1.0.0/GuessThe11-release.apk)** (Release APK)
             
             ### 🌐 Features in this release:
-            - **Global Online Multiplayer**: Works across different Wi-Fi and mobile networks globally.
-            - **Room Password / PIN**: Lock your room with a custom password and share via WhatsApp.
-            - **11-Player Realtime Drawing & Guessing**: Canvas sync, chat, timer, leaderboard & results.
+            - **Clean Human Glassmorphism UI**: Elegant frosted glass cards, refined floating toolbar docks, modern geometric typography, and seamless responsive design.
+            - **Permanent 24/7 Render Cloud Server**: Built-in default connection to `https://guess-the-11-backend.onrender.com` for instant play on any network globally.
+            - **Secret Word Instant Sync**: Guaranteed drawer word delivery with triple-delivery and socket caching.
+            - **Global Online Multiplayer**: Works smoothly across Wi-Fi, 4G, and 5G networks anywhere.
+            - **Room Password / PIN & WhatsApp Invite**: Lock private rooms and share 1-click invite links.
+            - **11-Player Realtime Drawing & Guesses**: Real-time canvas sync, live chat, dynamic timer, and global leaderboards.
           files: |
             release/android/GuessThe11-debug.apk
             release/android/GuessThe11-release.apk

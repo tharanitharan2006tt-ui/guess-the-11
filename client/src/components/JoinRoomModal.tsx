@@ -44,21 +44,21 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="w-full max-w-md glass-modal border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden flex flex-col font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-indigo-500 text-white shadow-sm">
+            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
               <LogIn className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold font-game tracking-wide text-white">
+            <h2 className="text-xl font-bold tracking-wide text-white">
               JOIN ROOM
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -66,7 +66,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
 
         <form onSubmit={handleSubmit} className="space-y-4 py-4">
           <div>
-            <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
               Enter 6-Character Room Code or Paste Link
             </label>
             <div className="relative">
@@ -79,7 +79,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
                 }}
                 placeholder="e.g. AB12CD"
                 maxLength={40}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-white font-mono text-center tracking-widest text-xl font-black uppercase focus:outline-none focus:border-indigo-400"
+                className="w-full glass-input border border-white/10 rounded-xl px-4 py-3 text-white font-mono text-center tracking-widest text-xl font-black uppercase focus:outline-none focus:border-indigo-400"
                 autoFocus
                 required
               />
@@ -88,7 +88,7 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-game font-semibold text-slate-300 mb-1.5 uppercase">
+            <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase">
               Room Password / PIN (If private)
             </label>
             <div className="relative">
@@ -101,21 +101,21 @@ export const JoinRoomModal: React.FC<JoinRoomModalProps> = ({
                 }}
                 placeholder="Leave blank if public room"
                 maxLength={30}
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-2.5 text-white font-mono text-center text-sm focus:outline-none focus:border-indigo-400"
+                className="w-full glass-input border border-white/10 rounded-xl px-4 py-2.5 text-white font-mono text-center text-sm focus:outline-none focus:border-indigo-400"
               />
               <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
             </div>
           </div>
 
           {error && (
-            <div className="p-3 rounded-xl bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/30">
+            <div className="p-3 rounded-xl bg-rose-500/15 text-rose-300 text-xs font-semibold border border-rose-500/30">
               {error}
             </div>
           )}
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-2xl btn-3d-indigo text-white flex items-center justify-center gap-2 text-sm uppercase tracking-wide cursor-pointer"
+            className="btn-glass-primary w-full py-3.5 rounded-2xl text-white flex items-center justify-center gap-2 text-sm uppercase tracking-wide cursor-pointer font-semibold"
           >
             <LogIn className="w-4 h-4" />
             Enter Room

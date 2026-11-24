@@ -91,10 +91,10 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
 
   if (error || !roomState) {
     return (
-      <div className="min-h-screen bg-[#0C101D] flex flex-col items-center justify-center p-4">
-        <div className="max-w-md w-full bg-slate-900 border-2 border-rose-500/30 p-6 rounded-3xl text-center shadow-xl">
+      <div className="min-h-screen bg-[#080C16] flex flex-col items-center justify-center p-4">
+        <div className="max-w-md w-full glass-modal border border-rose-500/30 p-6 rounded-3xl text-center shadow-xl">
           <ShieldAlert className="w-12 h-12 text-rose-400 mx-auto mb-3" />
-          <h2 className="text-xl font-game font-bold text-white mb-2 uppercase">
+          <h2 className="text-xl font-bold text-white mb-2 uppercase">
             Room Entry Failed
           </h2>
           <p className="text-xs text-slate-400 mb-6 font-sans">
@@ -103,14 +103,14 @@ export const RoomController: React.FC<RoomControllerProps> = ({ profile }) => {
           <div className="flex flex-col gap-2.5">
             <button
               onClick={() => setIsServerSettingsOpen(true)}
-              className="w-full py-3 rounded-2xl btn-3d-amber text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-glass-primary w-full py-3 rounded-2xl text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer font-semibold text-white"
             >
               <Settings className="w-4 h-4" />
               Configure Server Address
             </button>
             <button
               onClick={() => navigate('/')}
-              className="w-full py-3 rounded-2xl btn-3d-slate text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer"
+              className="btn-glass-secondary w-full py-3 rounded-2xl text-xs uppercase tracking-wide flex items-center justify-center gap-2 cursor-pointer font-semibold text-slate-200"
             >
               <ArrowLeft className="w-4 h-4" />
               Back to Home

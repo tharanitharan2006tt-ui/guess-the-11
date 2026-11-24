@@ -59,21 +59,21 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-lg bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl relative overflow-hidden max-h-[85vh] flex flex-col font-sans">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in fade-in duration-200">
+      <div className="w-full max-w-lg glass-modal border border-white/10 rounded-3xl p-6 shadow-2xl relative overflow-hidden max-h-[85vh] flex flex-col font-sans">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-white/[0.08]">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-xl bg-amber-400 text-slate-950 shadow-sm">
+            <div className="p-2 rounded-xl bg-indigo-500/20 text-indigo-400 border border-indigo-500/30">
               <Trophy className="w-5 h-5" />
             </div>
-            <h2 className="text-xl font-bold font-game tracking-wide text-white">
+            <h2 className="text-xl font-bold tracking-wide text-white">
               GLOBAL LEADERBOARD
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/[0.06] transition-all cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -95,19 +95,19 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
               return (
                 <div
                   key={p.id}
-                  className={`flex items-center justify-between p-3 rounded-2xl border-2 transition-all ${
+                  className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
                     isFirst
-                      ? 'bg-amber-400/15 border-amber-400 shadow-md'
+                      ? 'bg-gradient-to-r from-amber-500/15 to-yellow-500/10 border-amber-400/50 shadow-md shadow-amber-500/10'
                       : isSecond
-                      ? 'bg-slate-800/80 border-slate-600'
+                      ? 'bg-white/[0.05] border-white/[0.12]'
                       : isThird
-                      ? 'bg-slate-800/60 border-amber-800/60'
-                      : 'bg-slate-850/50 border-slate-800'
+                      ? 'bg-white/[0.03] border-amber-600/30'
+                      : 'bg-white/[0.02] border-white/[0.06]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     {/* Rank Badge */}
-                    <div className="w-7 h-7 flex items-center justify-center font-game font-bold text-sm">
+                    <div className="w-7 h-7 flex items-center justify-center font-bold text-sm">
                       {isFirst ? (
                         <Crown className="w-5 h-5 text-amber-400 animate-bounce-subtle" />
                       ) : isSecond ? (
@@ -122,7 +122,7 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
                     {/* Avatar & Username */}
                     <span className="text-2xl select-none">{avatarObj.icon}</span>
                     <div>
-                      <p className="text-sm font-game font-bold text-white leading-tight">
+                      <p className="text-sm font-bold text-white leading-tight">
                         {p.username}
                       </p>
                       <p className="text-[10px] text-slate-400 font-sans leading-tight">
@@ -133,10 +133,10 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
 
                   {/* Score */}
                   <div className="text-right">
-                    <span className="text-base font-game font-bold text-amber-400">
+                    <span className="text-base font-bold text-amber-400">
                       {p.total_score}
                     </span>
-                    <span className="text-[10px] text-slate-400 block -mt-1 font-game">PTS</span>
+                    <span className="text-[10px] text-slate-400 block -mt-1 font-semibold">PTS</span>
                   </div>
                 </div>
               );

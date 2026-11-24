@@ -280,7 +280,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
   return (
     <div className="flex flex-col w-full h-full select-none">
       {/* Canvas Paper Container */}
-      <div className="relative w-full aspect-[4/3] max-h-[55vh] md:max-h-[62vh] rounded-3xl overflow-hidden border-4 border-slate-700/80 shadow-2xl bg-white touch-none">
+      <div className="relative w-full aspect-[4/3] max-h-[55vh] md:max-h-[62vh] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.6)] bg-white touch-none">
         <canvas
           ref={canvasRef}
           width={800}
@@ -297,8 +297,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
 
         {/* Non-drawer lock indicator */}
         {!isDrawer && (
-          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/85 backdrop-blur-md border border-slate-700/70 text-xs font-game font-semibold text-slate-300 shadow-md">
-            <Lock className="w-3.5 h-3.5 text-amber-400" />
+          <div className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1 rounded-full glass-card border border-white/10 text-xs font-semibold text-slate-200 shadow-md">
+            <Lock className="w-3.5 h-3.5 text-indigo-400" />
             <span>Guesser View</span>
           </div>
         )}
@@ -306,14 +306,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
 
       {/* Drawer Control Toolbar */}
       {isDrawer && (
-        <div className="mt-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 flex flex-wrap items-center justify-between gap-2.5 shadow-xl">
+        <div className="mt-3 p-3 rounded-2xl glass-card border border-white/10 flex flex-wrap items-center justify-between gap-2.5 shadow-xl">
           {/* Tool switch: Brush vs Eraser */}
-          <div className="flex items-center gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700">
+          <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/[0.08]">
             <button
               onClick={() => setTool('brush')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'brush'
-                  ? 'btn-3d-amber text-slate-950 font-bold'
+                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-md shadow-indigo-500/25'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Paintbrush"
@@ -324,7 +324,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
               onClick={() => setTool('eraser')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'eraser'
-                  ? 'btn-3d-coral text-white font-bold'
+                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white font-semibold shadow-md shadow-rose-500/25'
                   : 'text-slate-400 hover:text-white'
               }`}
               title="Eraser"
@@ -333,16 +333,16 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             </button>
           </div>
 
-          {/* Color Palette (12 Human Studio Colors) */}
+          {/* Color Palette (12 Studio Colors) */}
           {tool === 'brush' && (
             <div className="flex items-center gap-1.5 overflow-x-auto py-1">
               {COLORS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setColor(c)}
-                  className={`w-6 h-6 rounded-full transition-transform border border-slate-600/40 ${
+                  className={`w-6 h-6 rounded-full transition-transform border border-white/20 ${
                     color === c
-                      ? 'scale-125 ring-2 ring-amber-400 ring-offset-2 ring-offset-slate-900'
+                      ? 'scale-125 ring-2 ring-indigo-400 ring-offset-2 ring-offset-[#080C16]'
                       : 'hover:scale-110'
                   }`}
                   style={{ backgroundColor: c }}
@@ -353,13 +353,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
           )}
 
           {/* Brush Sizes */}
-          <div className="flex items-center gap-1.5 bg-slate-800 p-1.5 rounded-xl border border-slate-700">
+          <div className="flex items-center gap-1.5 bg-white/[0.04] p-1.5 rounded-xl border border-white/[0.08]">
             {BRUSH_SIZES.map((sz) => (
               <button
                 key={sz}
                 onClick={() => setSize(sz)}
                 className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
-                  size === sz ? 'bg-amber-400 text-slate-950 font-bold' : 'text-slate-400 hover:text-white'
+                  size === sz ? 'bg-indigo-500 text-white font-bold shadow-sm' : 'text-slate-400 hover:text-white'
                 }`}
                 title={`Size ${sz}`}
               >
@@ -376,7 +376,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleUndo}
               disabled={strokes.length === 0}
-              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 transition-all"
+              className="p-2 rounded-xl bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all"
               title="Undo"
             >
               <Undo2 className="w-4 h-4" />
@@ -384,14 +384,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleRedo}
               disabled={undoneStrokes.length === 0}
-              className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 disabled:opacity-40 disabled:cursor-not-allowed border border-slate-700 transition-all"
+              className="p-2 rounded-xl bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all"
               title="Redo"
             >
               <Redo2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleClear}
-              className="p-2 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white border border-rose-500/40 transition-all"
+              className="p-2 rounded-xl bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30 transition-all"
               title="Clear Canvas"
             >
               <Trash2 className="w-4 h-4" />

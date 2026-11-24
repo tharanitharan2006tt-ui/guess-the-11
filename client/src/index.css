@@ -4,173 +4,189 @@
 
 @layer base {
   body {
-    background-color: #0C101D;
+    background: radial-gradient(130% 100% at 50% 0%, #111728 0%, #080C16 55%, #04060C 100%);
     color: #F8FAFC;
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
+    min-height: 100vh;
   }
 
-  h1, h2, h3, h4, .font-gaming, .font-game {
-    font-family: 'Fredoka', 'Outfit', system-ui, sans-serif;
-    letter-spacing: -0.01em;
+  h1, h2, h3, h4, .font-game, .font-gaming {
+    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    letter-spacing: -0.02em;
   }
 }
 
-/* Custom Friendly Scrollbar */
+/* Sleek Minimalist Glass Scrollbar */
 ::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(12, 16, 29, 0.6);
-  border-radius: 9999px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  border: 2px solid transparent;
-  background-clip: padding-box;
+  backdrop-filter: blur(8px);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* Tactile 3D Party Game Button Styles */
-.btn-3d-amber {
-  background: linear-gradient(180deg, #FFC526 0%, #FFB800 100%);
-  color: #1E1B18;
-  border-bottom: 4px solid #C78A00;
-  box-shadow: 0 6px 16px rgba(255, 184, 0, 0.25);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Fredoka', sans-serif;
-}
-.btn-3d-amber:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-bottom-width: 5px;
-  box-shadow: 0 8px 20px rgba(255, 184, 0, 0.35);
-}
-.btn-3d-amber:active:not(:disabled) {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
-  box-shadow: 0 2px 8px rgba(255, 184, 0, 0.2);
-}
+/* ===================================================
+   PREMIUM HUMAN-DESIGNED GLASSMORPHISM DESIGN TOKENS
+   =================================================== */
 
-.btn-3d-coral {
-  background: linear-gradient(180deg, #FF6E4D 0%, #FF5733 100%);
-  color: #FFFFFF;
-  border-bottom: 4px solid #C83412;
-  box-shadow: 0 6px 16px rgba(255, 87, 51, 0.3);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Fredoka', sans-serif;
-}
-.btn-3d-coral:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-bottom-width: 5px;
-  box-shadow: 0 8px 22px rgba(255, 87, 51, 0.4);
-}
-.btn-3d-coral:active:not(:disabled) {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
-  box-shadow: 0 2px 8px rgba(255, 87, 51, 0.2);
-}
-
-.btn-3d-mint {
-  background: linear-gradient(180deg, #1AE3AD 0%, #06D6A0 100%);
-  color: #062319;
-  border-bottom: 4px solid #048259;
-  box-shadow: 0 6px 16px rgba(6, 214, 160, 0.25);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Fredoka', sans-serif;
-}
-.btn-3d-mint:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-bottom-width: 5px;
-  box-shadow: 0 8px 20px rgba(6, 214, 160, 0.35);
-}
-.btn-3d-mint:active:not(:disabled) {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
-  box-shadow: 0 2px 8px rgba(6, 214, 160, 0.2);
-}
-
-.btn-3d-indigo {
-  background: linear-gradient(180deg, #818CF8 0%, #6366F1 100%);
-  color: #FFFFFF;
-  border-bottom: 4px solid #4345B8;
-  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.25);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Fredoka', sans-serif;
-}
-.btn-3d-indigo:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-bottom-width: 5px;
-  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
-}
-.btn-3d-indigo:active:not(:disabled) {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
-}
-
-.btn-3d-slate {
-  background: linear-gradient(180deg, #26334A 0%, #1A2436 100%);
-  color: #E2E8F0;
-  border-bottom: 4px solid #0E1624;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  transition: all 0.12s cubic-bezier(0.4, 0, 0.2, 1);
-  font-family: 'Fredoka', sans-serif;
-}
-.btn-3d-slate:hover:not(:disabled) {
-  transform: translateY(-2px);
-  border-bottom-width: 5px;
-  background: linear-gradient(180deg, #2E3E5B 0%, #202D43 100%);
-  color: #FFFFFF;
-}
-.btn-3d-slate:active:not(:disabled) {
-  transform: translateY(2px);
-  border-bottom-width: 2px;
-}
-
-/* Glassmorphism & Game Cards */
-.glass-panel {
-  background: rgba(24, 35, 60, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(148, 163, 184, 0.16);
-}
-
+/* Primary Frosted Glass Card */
 .glass-card {
-  background: rgba(22, 32, 54, 0.8);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.065);
+  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 16px 44px 0 rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+/* Glass Modal Container */
+.glass-modal {
+  background: rgba(11, 16, 30, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.75), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Glass Pill / Badge */
+.glass-pill {
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
-.game-card-tactile {
-  background: linear-gradient(180deg, rgba(28, 41, 70, 0.85) 0%, rgba(20, 29, 49, 0.9) 100%);
-  border: 2px solid rgba(100, 116, 139, 0.25);
-  border-radius: 1.25rem;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  transition: all 0.2s ease;
+/* Glass Input */
+.glass-input {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #FFFFFF;
+  transition: all 0.18s ease;
 }
 
-.game-card-tactile:hover {
-  border-color: rgba(148, 163, 184, 0.4);
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(129, 140, 248, 0.6);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  outline: none;
+}
+
+/* ===================================================
+   CLEAN HUMAN-DESIGNED GLASS BUTTONS
+   =================================================== */
+
+/* Primary Hero Button: Electric Indigo Gradient Glass */
+.btn-glass-primary {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #4F46E5 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass-primary:hover:not(:disabled) {
   transform: translateY(-2px);
+  box-shadow: 0 12px 32px -4px rgba(139, 92, 246, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  filter: brightness(1.05);
 }
 
-/* Friendly Pill Badge */
-.badge-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-family: 'Fredoka', sans-serif;
-  font-size: 0.75rem;
-  letter-spacing: 0.025em;
+.btn-glass-primary:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 4px 14px -2px rgba(99, 102, 241, 0.35);
 }
+
+/* Emerald Action Button: Clean Glass */
+.btn-glass-emerald {
+  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass-emerald:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px -4px rgba(16, 185, 129, 0.55);
+}
+
+.btn-glass-emerald:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Secondary Frosted Glass Button */
+.btn-glass-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  color: #F1F5F9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass-secondary:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  color: #FFFFFF;
+}
+
+.btn-glass-secondary:active:not(:disabled) {
+  transform: translateY(1px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+/* Danger / Leave Glass Button */
+.btn-glass-danger {
+  background: rgba(239, 68, 68, 0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #FCA5A5;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 600;
+  transition: all 0.18s ease;
+}
+
+.btn-glass-danger:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #FFFFFF;
+}
+
+/* Backwards compatibility aliases */
+.btn-3d-amber { @apply btn-glass-primary; }
+.btn-3d-coral { @apply btn-glass-secondary; }
+.btn-3d-mint { @apply btn-glass-emerald; }
+.btn-3d-indigo { @apply btn-glass-primary; }
+.btn-3d-slate { @apply btn-glass-secondary; }
+.game-card-tactile { @apply glass-card; }
+.glass-panel { @apply glass-card; }

@@ -82,9 +82,9 @@ export const AdminDashboard: React.FC = () => {
       <div className="max-w-6xl mx-auto">
         {!isAuthenticated ? (
           // Admin Authentication Form
-          <div className="max-w-md mx-auto p-6 rounded-3xl bg-slate-900 border-2 border-slate-700 shadow-2xl text-center">
-            <KeyRound className="w-10 h-10 text-amber-400 mx-auto mb-3" />
-            <h2 className="text-lg font-game font-bold text-white uppercase mb-1">
+          <div className="max-w-md mx-auto p-6 rounded-3xl glass-modal border border-white/10 shadow-2xl text-center">
+            <KeyRound className="w-10 h-10 text-indigo-400 mx-auto mb-3" />
+            <h2 className="text-lg font-bold text-white uppercase mb-1">
               Admin Access Required
             </h2>
             <p className="text-xs text-slate-400 mb-6">
@@ -97,12 +97,12 @@ export const AdminDashboard: React.FC = () => {
                 value={secretKey}
                 onChange={(e) => setSecretKey(e.target.value)}
                 placeholder="Enter Admin Secret..."
-                className="w-full bg-slate-950 border-2 border-slate-700 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-amber-400 font-sans"
+                className="w-full glass-input border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-indigo-400 font-sans"
                 required
               />
 
               {error && (
-                <div className="p-3 rounded-xl bg-rose-500/20 text-rose-300 text-xs font-semibold border border-rose-500/30">
+                <div className="p-3 rounded-xl bg-rose-500/15 text-rose-300 text-xs font-semibold border border-rose-500/30">
                   {error}
                 </div>
               )}
@@ -110,7 +110,7 @@ export const AdminDashboard: React.FC = () => {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 rounded-2xl btn-3d-amber text-xs uppercase tracking-wider cursor-pointer disabled:opacity-50"
+                className="btn-glass-primary w-full py-3.5 rounded-2xl text-xs uppercase tracking-wider cursor-pointer font-semibold text-white disabled:opacity-50"
               >
                 {loading ? 'Authenticating...' : 'Unlock Dashboard'}
               </button>

@@ -132,25 +132,28 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   // Timer color
   const timerColor =
     timeRemaining > 20
-      ? 'text-emerald-400 border-emerald-500/50 bg-emerald-500/10'
+      ? 'text-emerald-300 border-emerald-500/30 bg-emerald-500/10'
       : timeRemaining > 10
-      ? 'text-amber-400 border-amber-500/50 bg-amber-500/10'
-      : 'text-rose-400 border-rose-500/50 bg-rose-500/10 animate-pulse';
+      ? 'text-amber-300 border-amber-500/30 bg-amber-500/10'
+      : 'text-rose-300 border-rose-500/40 bg-rose-500/15 animate-pulse';
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#0C101D] text-slate-100 p-2 md:p-5 select-none relative overflow-x-hidden">
-      {/* Top Game Bar */}
-      <header className="max-w-7xl mx-auto w-full mb-3 p-3 rounded-2xl bg-slate-900/90 border-2 border-slate-800 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+    <div className="min-h-screen flex flex-col bg-[#080C16] text-slate-100 p-2 md:p-5 select-none relative overflow-x-hidden">
+      {/* Soft Ambient Glows */}
+      <div className="absolute top-10 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* Top Game Bar - Clean Glass HUD */}
+      <header className="max-w-7xl mx-auto w-full mb-3.5 p-3.5 rounded-3xl glass-card border border-white/[0.08] flex flex-wrap items-center justify-between gap-3 shadow-xl relative z-10">
         {/* Round Counter */}
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-amber-400/15 text-amber-400 border border-amber-400/30">
-            <Trophy className="w-5 h-5" />
+          <div className="p-2 rounded-2xl glass-pill text-indigo-400">
+            <Trophy className="w-4 h-4" />
           </div>
           <div>
             <span className="text-[10px] uppercase font-game font-semibold text-slate-400 tracking-wider block">
-              Current Round
+              Round
             </span>
-            <span className="font-game font-bold text-sm md:text-base text-white">
+            <span className="font-game font-extrabold text-sm md:text-base text-white">
               {roomState.currentRound} / {roomState.totalRounds}
             </span>
           </div>
@@ -160,11 +163,11 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         <div className="flex-1 max-w-md text-center px-2">
           {isDrawer ? (
             <div className="inline-flex flex-col items-center">
-              <span className="text-[10px] uppercase font-game font-bold text-amber-400 tracking-wider">
+              <span className="text-[10px] uppercase font-game font-bold text-indigo-300 tracking-wider">
                 YOUR SECRET WORD TO DRAW:
               </span>
-              <div className="flex items-center gap-2">
-                <span className="font-game text-xl md:text-2xl font-bold text-white tracking-wide">
+              <div className="flex items-center gap-2 mt-0.5">
+                <span className="font-game text-xl md:text-2xl font-black text-white tracking-wide bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">
                   {secretWord ? secretWord.word : 'Loading...'}
                 </span>
                 {secretWord?.hint && (
@@ -176,10 +179,10 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </div>
           ) : (
             <div className="inline-flex flex-col items-center">
-              <span className="text-[10px] uppercase font-game font-semibold text-slate-400 tracking-wider">
+              <span className="text-[10px] uppercase font-game font-medium text-slate-400 tracking-wider">
                 {currentDrawer?.username} is drawing ({roomState.wordCategory || 'General'}):
               </span>
-              <span className="font-mono text-xl md:text-2xl font-black tracking-[0.3em] text-amber-300">
+              <span className="font-mono text-xl md:text-2xl font-black tracking-[0.3em] text-cyan-300 mt-0.5 drop-shadow-[0_2px_10px_rgba(6,182,212,0.3)]">
                 {roomState.wordHint || '_ _ _ _ _'}
               </span>
             </div>
@@ -187,7 +190,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         </div>
 
         {/* Timer */}
-        <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border-2 ${timerColor}`}>
+        <div className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full border glass-pill ${timerColor}`}>
           <Clock className="w-4 h-4" />
           <span className="font-game font-bold text-sm md:text-base">
             {timeRemaining}s
@@ -196,16 +199,16 @@ export const GameScreen: React.FC<GameScreenProps> = ({
       </header>
 
       {/* Main Game Layout: Canvas (Center) + Mini Leaderboard (Left) + Chat/Guess (Right) */}
-      <main className="max-w-7xl mx-auto w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3 items-start">
+      <main className="max-w-7xl mx-auto w-full flex-1 grid grid-cols-1 lg:grid-cols-12 gap-3.5 items-start relative z-10">
         {/* Left: Live Scores Roster */}
-        <aside className="lg:col-span-2 hidden lg:flex flex-col gap-2 bg-slate-900/80 p-3 rounded-2xl border-2 border-slate-800 max-h-[72vh] overflow-y-auto shadow-lg">
-          <span className="text-xs font-game font-bold uppercase tracking-wider text-slate-400 mb-1">
-            Squad Roster
+        <aside className="lg:col-span-2 hidden lg:flex flex-col gap-2 glass-card p-3.5 rounded-3xl border border-white/[0.08] max-h-[74vh] overflow-y-auto shadow-xl">
+          <span className="text-[11px] font-game font-bold uppercase tracking-wider text-slate-400 mb-1">
+            Live Standings
           </span>
           {roomState.players
             .slice()
             .sort((a, b) => b.score - a.score)
-            .map((p) => {
+            .map((p, idx) => {
               const avatarObj = AVATARS.find((a) => a.id === p.avatar) || AVATARS[0];
               const isThisDrawer = p.id === roomState.currentDrawerId;
               const hasGuessed = p.hasGuessedThisRound;
@@ -213,18 +216,18 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               return (
                 <div
                   key={p.id}
-                  className={`p-2 rounded-xl border flex items-center justify-between text-xs transition-all ${
+                  className={`p-2.5 rounded-2xl border flex items-center justify-between text-xs transition-all ${
                     p.id === currentUserId
-                      ? 'border-amber-400 bg-amber-400/10'
+                      ? 'border-indigo-400/40 bg-indigo-500/15 shadow-sm'
                       : isThisDrawer
-                      ? 'border-purple-400/40 bg-purple-950/20'
-                      : 'border-slate-800 bg-slate-800/40'
+                      ? 'border-purple-400/30 bg-purple-950/20'
+                      : 'border-white/[0.06] bg-white/[0.02]'
                   }`}
                 >
                   <div className="flex items-center gap-2 truncate">
                     <span className="text-base select-none">{avatarObj.icon}</span>
                     <div className="truncate">
-                      <p className="font-game font-semibold text-white truncate leading-tight">
+                      <p className="font-game font-bold text-white truncate leading-tight">
                         {p.username}
                       </p>
                       <span className="text-[10px] font-sans text-slate-400 block -mt-0.5">
@@ -232,7 +235,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                       </span>
                     </div>
                   </div>
-                  <span className="font-game font-bold text-amber-400 ml-1">
+                  <span className="font-game font-extrabold text-indigo-300 ml-1">
                     {p.score}
                   </span>
                 </div>
@@ -262,31 +265,31 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* OVERLAY 1: ROUND RESULT (Intermission between rounds) */}
       {roundResult && !gameOverResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md animate-in zoom-in-95 duration-200">
-          <div className="w-full max-w-md bg-slate-900 border-2 border-slate-700 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden">
-            <span className="text-xs font-game font-bold uppercase tracking-wider text-slate-400">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in zoom-in-95 duration-200">
+          <div className="w-full max-w-md glass-modal rounded-3xl p-6 text-center relative overflow-hidden border border-white/10 shadow-2xl">
+            <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
               Round {roundResult.round} Finished
             </span>
 
-            <h3 className="text-xl sm:text-2xl font-game font-bold text-white uppercase mt-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-white uppercase mt-2">
               The Word Was:
             </h3>
 
-            <div className="my-3 py-2.5 px-5 rounded-2xl bg-amber-400/15 border-2 border-amber-400/40 inline-block">
-              <span className="text-2xl sm:text-3xl font-game font-bold text-amber-300 tracking-wider">
+            <div className="my-3 py-2.5 px-6 rounded-2xl bg-amber-400/15 border border-amber-400/40 inline-block shadow-inner">
+              <span className="text-2xl sm:text-3xl font-bold text-amber-300 tracking-wider">
                 {roundResult.word}
               </span>
             </div>
 
             {/* Score Delta Breakdown */}
-            <div className="my-4 p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2 text-xs font-sans">
+            <div className="my-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2 text-xs">
               {/* Drawer Outcome */}
-              <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
+              <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
                 <span className="text-slate-300 font-medium">
                   Drawer: {roundResult.drawerName}
                 </span>
                 <span
-                  className={`font-game font-bold text-sm ${
+                  className={`font-semibold text-sm ${
                     roundResult.drawerPointsAwarded > 0 ? 'text-emerald-400' : 'text-rose-400'
                   }`}
                 >
@@ -298,7 +301,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
               {/* Correct Guessers */}
               <div className="text-left">
-                <span className="text-[11px] font-game font-bold text-slate-400 uppercase">
+                <span className="text-[11px] font-semibold text-slate-400 uppercase">
                   Correct Guessers ({roundResult.correctGuessers.length}):
                 </span>
                 {roundResult.correctGuessers.length === 0 ? (
@@ -308,7 +311,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                     {roundResult.correctGuessers.map((g) => (
                       <span
                         key={g.playerId}
-                        className="px-2.5 py-1 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[11px] font-semibold"
+                        className="px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold"
                       >
                         {g.username} (+1 pt)
                       </span>
@@ -318,7 +321,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               </div>
             </div>
 
-            <p className="text-xs text-amber-400 font-game font-semibold animate-pulse">
+            <p className="text-xs text-indigo-400 font-semibold animate-pulse">
               Starting next round shortly...
             </p>
           </div>
@@ -327,13 +330,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* OVERLAY 2: FINAL GAME OVER & WINNER SCREEN */}
       {gameOverResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md animate-in zoom-in-95 duration-300">
-          <div className="w-full max-w-lg bg-slate-900 border-2 border-amber-400/60 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden max-h-[92vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in zoom-in-95 duration-300">
+          <div className="w-full max-w-lg glass-modal border border-amber-400/40 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden max-h-[92vh] flex flex-col">
             {/* Title */}
-            <span className="text-xs font-game font-bold uppercase tracking-wider text-amber-400 mb-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
               🏆 GAME COMPLETED 🏆
             </span>
-            <h2 className="text-3xl sm:text-4xl font-game font-bold text-white uppercase drop-shadow-sm">
+            <h2 className="text-3xl sm:text-4xl font-bold text-white uppercase drop-shadow-sm">
               {gameOverResult.winner?.username} WINS!
             </h2>
 
@@ -341,35 +344,35 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             <div className="my-5 grid grid-cols-3 gap-2.5 items-end max-w-md mx-auto w-full pt-4">
               {/* 2nd Place */}
               {gameOverResult.podium[1] && (
-                <div className="p-3 rounded-2xl bg-slate-800 border-2 border-slate-600 flex flex-col items-center">
+                <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.1] backdrop-blur-md flex flex-col items-center">
                   <Medal className="w-6 h-6 text-slate-300 mb-1" />
                   <span className="text-2xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.podium[1].avatar)?.icon || '🥈'}
                   </span>
-                  <p className="text-xs font-game font-bold text-white truncate max-w-full mt-1">
+                  <p className="text-xs font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.podium[1].username}
                   </p>
-                  <span className="text-sm font-game font-bold text-slate-300">
+                  <span className="text-sm font-semibold text-slate-300">
                     {gameOverResult.podium[1].score} pts
                   </span>
-                  <span className="text-[10px] text-slate-400 font-sans font-semibold">2nd Place</span>
+                  <span className="text-[10px] text-slate-400 font-medium">2nd Place</span>
                 </div>
               )}
 
               {/* 1st Place (Champion) */}
               {gameOverResult.winner && (
-                <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/25 to-yellow-600/15 border-2 border-amber-400 flex flex-col items-center shadow-lg shadow-amber-950/30 scale-105">
+                <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/20 to-yellow-600/10 border-2 border-amber-400/60 flex flex-col items-center shadow-lg shadow-amber-500/10 scale-105">
                   <Crown className="w-8 h-8 text-amber-400 mb-1 animate-bounce" />
                   <span className="text-3xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.winner.avatar)?.icon || '👑'}
                   </span>
-                  <p className="text-sm font-game font-bold text-white truncate max-w-full mt-1">
+                  <p className="text-sm font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.winner.username}
                   </p>
-                  <span className="text-lg font-game font-bold text-amber-400">
+                  <span className="text-lg font-bold text-amber-400">
                     {gameOverResult.winner.score} pts
                   </span>
-                  <span className="text-[10px] text-amber-300 font-game font-bold uppercase tracking-wider">
+                  <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider">
                     Champion
                   </span>
                 </div>
@@ -377,18 +380,18 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
               {/* 3rd Place */}
               {gameOverResult.podium[2] && (
-                <div className="p-3 rounded-2xl bg-slate-800 border-2 border-amber-700/60 flex flex-col items-center">
+                <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.1] backdrop-blur-md flex flex-col items-center">
                   <Medal className="w-6 h-6 text-amber-600 mb-1" />
                   <span className="text-2xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.podium[2].avatar)?.icon || '🥉'}
                   </span>
-                  <p className="text-xs font-game font-bold text-white truncate max-w-full mt-1">
+                  <p className="text-xs font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.podium[2].username}
                   </p>
-                  <span className="text-sm font-game font-bold text-amber-500">
+                  <span className="text-sm font-semibold text-amber-500">
                     {gameOverResult.podium[2].score} pts
                   </span>
-                  <span className="text-[10px] text-slate-400 font-sans font-semibold">3rd Place</span>
+                  <span className="text-[10px] text-slate-400 font-medium">3rd Place</span>
                 </div>
               )}
             </div>
@@ -398,36 +401,36 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               {gameOverResult.leaderboard.map((p, idx) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06]"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-slate-500 font-bold w-5">#{idx + 1}</span>
-                    <span className="font-game font-semibold text-white">{p.username}</span>
+                    <span className="font-mono text-slate-400 font-bold w-5">#{idx + 1}</span>
+                    <span className="font-semibold text-white">{p.username}</span>
                   </div>
-                  <span className="font-game font-bold text-amber-400">{p.score} pts</span>
+                  <span className="font-bold text-amber-400">{p.score} pts</span>
                 </div>
               ))}
             </div>
 
             {/* Actions: Play Again (Host) or Home */}
-            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800">
+            <div className="grid grid-cols-2 gap-3 pt-3 border-t border-white/[0.08]">
               {roomState.hostId === currentUserId ? (
                 <button
                   onClick={handlePlayAgain}
-                  className="btn-3d-mint py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer"
+                  className="btn-glass-emerald py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold text-white"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Play Again
                 </button>
               ) : (
-                <div className="py-3 px-4 rounded-xl bg-slate-800 border border-slate-700 text-slate-400 text-xs font-game font-semibold flex items-center justify-center">
+                <div className="py-3 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-400 text-xs font-medium flex items-center justify-center">
                   Waiting for host...
                 </div>
               )}
 
               <button
                 onClick={onReturnHome}
-                className="btn-3d-slate py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer"
+                className="btn-glass-secondary py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold text-slate-200"
               >
                 <Home className="w-4 h-4" />
                 Return Home
