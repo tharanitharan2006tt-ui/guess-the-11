@@ -44,15 +44,15 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
   const handleCopyLink = () => {
     navigator.clipboard.writeText(inviteUrl);
     setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setTimeout(() => setCopied(false), 2500);
   };
 
-  // WhatsApp Share
+  // WhatsApp Share with 1-click join link
   const handleWhatsAppShare = () => {
     const text = encodeURIComponent(
-      `🎮 Join my squad on GUESS THE 11!\nRoom ID: ${roomState.code}${
-        hasPassword ? `\nPassword: ${roomState.settings.password}` : ''
-      }\nJoin link: ${inviteUrl}`
+      `🎮 Join my squad on GUESS THE 11!\n👉 Click link to play directly:\n${inviteUrl}\n\nRoom Code: ${roomState.code}${
+        hasPassword ? `\nPIN: ${roomState.settings.password}` : ''
+      }`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };
@@ -123,56 +123,62 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
       {/* Main Content Area */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col items-center justify-center py-6 relative z-10">
         {/* Room Code & Invite Card */}
-        <div className="w-full max-w-lg glass-card p-6 md:p-8 rounded-2xl text-center mb-6 relative overflow-hidden">
-          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#929BB3]">
-            Room Invitation Code
+        <div className="w-full max-w-lg glass-card p-5 md:p-8 rounded-2xl text-center mb-6 relative overflow-hidden">
+          <span className="text-xs font-semibold uppercase tracking-wider text-[#929BB3]">
+            Share Room Code with Friends
           </span>
           <div className="flex items-center justify-center gap-3 my-2.5">
-            <span className="font-mono text-4xl sm:text-5xl font-extrabold tracking-widest text-[#F4F5FF] select-all drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)]">
+            <span className="font-mono text-4xl sm:text-5xl font-extrabold tracking-widest text-[#F4F5FF] select-all drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)] bg-black/20 px-4 py-1 rounded-2xl border border-white/5">
               {roomState.code}
             </span>
             <button
               onClick={handleCopyLink}
-              className="p-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-[#F4F5FF] transition-all cursor-pointer border border-white/10"
+              className="p-3 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] text-[#F4F5FF] transition-all cursor-pointer border border-white/10 active:scale-95"
               title="Copy Room Link"
             >
               {copied ? <Check className="w-5 h-5 text-[#28DFA5]" /> : <Copy className="w-5 h-5" />}
             </button>
           </div>
 
+          {copied && (
+            <p className="text-xs text-[#28DFA5] font-semibold mb-2 animate-in fade-in duration-150">
+              ✓ Link copied! Paste & send to your friends.
+            </p>
+          )}
+
           {/* Optional Room Password Display */}
           {hasPassword && (
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFC857]/10 text-xs font-mono text-[#FFC857] mb-3 border border-[#FFC857]/30">
               <Lock className="w-3.5 h-3.5 text-[#FFC857]" />
-              <span>PIN: <strong className="text-white font-bold">{roomState.settings.password}</strong></span>
+              <span>Room PIN: <strong className="text-white font-bold">{roomState.settings.password}</strong></span>
             </div>
           )}
 
           {/* Waiting Status Badge */}
           <div className="block mb-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-semibold text-[#F4F5FF]">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-semibold text-[#F4F5FF]">
               <Users className="w-4 h-4 text-[#7655F7]" />
-              <span className="text-[#929BB3]">WAITING FOR SQUAD:</span>
-              <span className="text-[#A78BFA] font-bold text-sm tabular-nums">{playerCount} / {maxPlayers}</span>
+              <span className="text-[#929BB3]">Squad status:</span>
+              <span className="text-[#A78BFA] font-bold text-sm tabular-nums">{playerCount} / {maxPlayers} Players</span>
             </div>
           </div>
 
-          {/* Share Actions */}
+          {/* Share Actions (Large, easy-to-tap touch buttons) */}
           <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
             <button
               onClick={handleWhatsAppShare}
-              className="py-2.5 px-3 rounded-xl bg-[#28DFA5]/15 border border-[#28DFA5]/30 text-[#28DFA5] hover:bg-[#28DFA5]/25 transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="py-3 px-4 rounded-xl bg-[#28DFA5]/20 hover:bg-[#28DFA5]/30 border border-[#28DFA5]/40 text-[#28DFA5] transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
-              WhatsApp
+              <span>Share WhatsApp</span>
             </button>
 
             <button
               onClick={handleNativeShare}
-              className="py-2.5 px-3 rounded-xl bg-[#7655F7]/15 border border-[#7655F7]/30 text-[#A78BFA] hover:bg-[#7655F7]/25 transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="py-3 px-4 rounded-xl bg-[#7655F7]/20 hover:bg-[#7655F7]/30 border border-[#7655F7]/40 text-[#A78BFA] transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer active:scale-95"
             >
               <Share2 className="w-4 h-4" />
-              Share Link
+              <span>Share Link</span>
             </button>
           </div>
         </div>

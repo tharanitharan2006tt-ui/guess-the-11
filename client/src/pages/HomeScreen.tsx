@@ -190,7 +190,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
           <button
             onClick={handleQuickPlay}
             disabled={quickPlayLoading}
-            className="w-full p-4.5 rounded-2xl bg-gradient-to-r from-[#7655F7] to-[#5838DF] hover:from-[#8B6BFF] hover:to-[#6A4BEF] border border-white/20 flex items-center justify-between group disabled:opacity-50 select-none cursor-pointer relative overflow-hidden transition-all duration-300 shadow-[0_8px_30px_rgba(118,85,247,0.35)]"
+            className="w-full p-4.5 rounded-2xl bg-gradient-to-r from-[#7655F7] to-[#5838DF] hover:from-[#8B6BFF] hover:to-[#6A4BEF] border border-white/20 flex items-center justify-between group disabled:opacity-50 select-none cursor-pointer relative overflow-hidden transition-all duration-300 shadow-[0_8px_30px_rgba(118,85,247,0.35)] active:scale-[0.98]"
           >
             <div className="flex items-center gap-3.5 relative z-10">
               <div className="p-3 rounded-xl bg-white/10 text-[#F4F5FF] shadow-inner group-hover:scale-105 transition-transform duration-300">
@@ -202,10 +202,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
               </div>
               <div className="text-left">
                 <span className="block text-base font-bold tracking-tight text-[#F4F5FF]">
-                  {quickPlayLoading ? 'Searching Match...' : 'Quick Play'}
+                  {quickPlayLoading ? 'Finding Players...' : 'Play Now (Quick Match)'}
                 </span>
-                <span className="block text-xs text-[#F4F5FF]/70 font-medium">
-                  Instant Competitive Matchmaking
+                <span className="block text-xs text-[#F4F5FF]/80 font-medium">
+                  Tap to play instantly with other players
                 </span>
               </div>
             </div>
@@ -215,12 +215,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
             </div>
           </button>
 
+          {/* Friendly 3-Step Quick Guide Pill */}
+          <div className="w-full p-3 rounded-2xl bg-[#0D1221] border border-white/[0.08] flex items-center justify-around text-center shadow-inner">
+            <div className="flex flex-col items-center">
+              <span className="text-base select-none">✏️</span>
+              <span className="font-bold text-[#F4F5FF] text-xs mt-0.5">1. Draw</span>
+              <span className="text-[10px] text-[#929BB3]">Secret word</span>
+            </div>
+            <span className="text-[#929BB3]/40 text-xs font-bold">➔</span>
+            <div className="flex flex-col items-center">
+              <span className="text-base select-none">💬</span>
+              <span className="font-bold text-[#F4F5FF] text-xs mt-0.5">2. Guess</span>
+              <span className="text-[10px] text-[#929BB3]">Type in chat</span>
+            </div>
+            <span className="text-[#929BB3]/40 text-xs font-bold">➔</span>
+            <div className="flex flex-col items-center">
+              <span className="text-base select-none">🏆</span>
+              <span className="font-bold text-[#F4F5FF] text-xs mt-0.5">3. Win!</span>
+              <span className="text-[10px] text-[#929BB3]">Score points</span>
+            </div>
+          </div>
+
           {/* Create Room & Join Room row - Interactive Surface Cards */}
           <div className="grid grid-cols-2 gap-3.5">
             <button
               onClick={() => setIsCreateOpen(true)}
               disabled={isCreatingRoom}
-              className="p-4 rounded-2xl glass-card hover:border-[#7655F7]/50 text-left flex flex-col justify-between group select-none cursor-pointer disabled:opacity-50 min-h-[140px] transition-all duration-300"
+              className="p-4 rounded-2xl glass-card hover:border-[#7655F7]/50 text-left flex flex-col justify-between group select-none cursor-pointer disabled:opacity-50 min-h-[140px] transition-all duration-300 active:scale-[0.98]"
             >
               <div className="p-2.5 rounded-xl bg-[#7655F7]/15 border border-[#7655F7]/30 text-[#A78BFA] w-fit mb-3 group-hover:scale-110 transition-transform">
                 {isCreatingRoom ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
@@ -230,14 +251,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
                   {isCreatingRoom ? 'Creating...' : 'Create Room'}
                 </h3>
                 <p className="text-[11px] text-[#929BB3] mt-0.5">
-                  Host 11-player squad
+                  Play privately with friends
                 </p>
               </div>
             </button>
 
             <button
               onClick={() => setIsJoinOpen(true)}
-              className="p-4 rounded-2xl glass-card hover:border-[#28C7E8]/50 text-left flex flex-col justify-between group select-none cursor-pointer min-h-[140px] transition-all duration-300"
+              className="p-4 rounded-2xl glass-card hover:border-[#28C7E8]/50 text-left flex flex-col justify-between group select-none cursor-pointer min-h-[140px] transition-all duration-300 active:scale-[0.98]"
             >
               <div className="p-2.5 rounded-xl bg-[#28C7E8]/15 border border-[#28C7E8]/30 text-[#28C7E8] w-fit mb-3 group-hover:scale-110 transition-transform">
                 <LogIn className="w-5 h-5" />
@@ -247,7 +268,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
                   Join Room
                 </h3>
                 <p className="text-[11px] text-[#929BB3] mt-0.5">
-                  Enter 6-digit code or link
+                  Enter friend's code or link
                 </p>
               </div>
             </button>

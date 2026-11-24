@@ -162,18 +162,19 @@ export const ChatBox: React.FC<ChatBoxProps> = ({
           onChange={(e) => setInputText(e.target.value)}
           placeholder={
             isDrawer
-              ? 'You are drawing! Chat with players...'
+              ? '🎨 You are drawing! Chat with players...'
               : hasGuessedThisRound
-              ? 'You guessed! Chat with other players...'
-              : 'Type your guess here...'
+              ? '🎉 You guessed correctly! Chat with squad...'
+              : '💡 Type your guess here (e.g. apple)...'
           }
           maxLength={60}
-          className="flex-1 glass-input text-xs md:text-sm px-3.5 py-2.5 rounded-xl border border-white/10 focus:outline-none focus:border-[#7655F7] transition-colors placeholder:text-[#929BB3] text-[#F4F5FF]"
+          className="flex-1 glass-input text-xs md:text-sm px-4 py-3 rounded-xl border border-white/10 focus:outline-none focus:border-[#7655F7] transition-colors placeholder:text-[#929BB3] text-[#F4F5FF]"
         />
         <button
           type="submit"
           disabled={!inputText.trim()}
-          className="btn-glass-primary px-3.5 py-2.5 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer text-[#F4F5FF]"
+          className="btn-glass-primary px-4 py-3 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer text-[#F4F5FF] active:scale-95"
+          title="Send guess or message"
         >
           <Send className="w-4 h-4 text-white" />
         </button>

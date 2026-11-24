@@ -163,15 +163,15 @@ export const GameScreen: React.FC<GameScreenProps> = ({
         <div className="flex-1 max-w-md text-center px-2">
           {isDrawer ? (
             <div className="inline-flex flex-col items-center">
-              <span className="text-[10px] uppercase font-game font-bold text-indigo-300 tracking-wider">
-                YOUR SECRET WORD TO DRAW:
+              <span className="text-[11px] uppercase font-bold text-[#A78BFA] tracking-wider flex items-center gap-1.5">
+                <span>🎨</span> YOUR SECRET WORD TO DRAW:
               </span>
               <div className="flex items-center gap-2 mt-0.5">
-                <span className="font-game text-xl md:text-2xl font-black text-white tracking-wide bg-gradient-to-r from-white via-indigo-100 to-indigo-200 bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">
+                <span className="text-xl md:text-2xl font-black text-white tracking-wide bg-gradient-to-r from-white via-indigo-100 to-[#28C7E8] bg-clip-text text-transparent drop-shadow-[0_2px_12px_rgba(255,255,255,0.3)]">
                   {secretWord ? secretWord.word : 'Loading...'}
                 </span>
                 {secretWord?.hint && (
-                  <span className="text-xs text-slate-400 hidden sm:inline" title={secretWord.hint}>
+                  <span className="text-xs text-[#929BB3] hidden sm:inline" title={secretWord.hint}>
                     ({secretWord.hint})
                   </span>
                 )}
@@ -179,10 +179,10 @@ export const GameScreen: React.FC<GameScreenProps> = ({
             </div>
           ) : (
             <div className="inline-flex flex-col items-center">
-              <span className="text-[10px] uppercase font-game font-medium text-slate-400 tracking-wider">
-                {currentDrawer?.username} is drawing ({roomState.wordCategory || 'General'}):
+              <span className="text-[11px] uppercase font-medium text-[#929BB3] tracking-wider flex items-center gap-1.5">
+                <span>🤔</span> {currentDrawer?.username} is drawing ({roomState.wordCategory || 'General'}):
               </span>
-              <span className="font-mono text-xl md:text-2xl font-black tracking-[0.3em] text-cyan-300 mt-0.5 drop-shadow-[0_2px_10px_rgba(6,182,212,0.3)]">
+              <span className="font-mono text-xl md:text-2xl font-black tracking-[0.3em] text-[#28C7E8] mt-0.5 drop-shadow-[0_2px_10px_rgba(40,199,232,0.35)]">
                 {roomState.wordHint || '_ _ _ _ _'}
               </span>
             </div>
