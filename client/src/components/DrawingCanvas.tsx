@@ -18,16 +18,16 @@ interface DrawingCanvasProps {
 
 const COLORS = [
   '#000000', // Deep Black
-  '#64748B', // Charcoal Slate
-  '#EF4444', // Warm Red
+  '#64748B', // Slate
+  '#FF647C', // Coral Red
   '#F97316', // Sunset Orange
-  '#EAB308', // Sunshine Yellow
-  '#22C55E', // Forest Green
-  '#06B6D4', // Bright Cyan
+  '#FFC857', // Gold Warning
+  '#28DFA5', // Emerald Mint
+  '#28C7E8', // Electric Cyan
   '#3B82F6', // Royal Blue
-  '#8B5CF6', // Vivid Purple
-  '#EC4899', // Bubblegum Pink
-  '#854D0E', // Wood Brown
+  '#7655F7', // Primary Purple
+  '#EC4899', // Pink
+  '#854D0E', // Brown
   '#FFFFFF'  // Pure White
 ];
 
@@ -308,13 +308,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
       {isDrawer && (
         <div className="mt-3 p-3 rounded-2xl glass-card border border-white/10 flex flex-wrap items-center justify-between gap-2.5 shadow-xl">
           {/* Tool switch: Brush vs Eraser */}
-          <div className="flex items-center gap-1 bg-white/[0.04] p-1 rounded-xl border border-white/[0.08]">
+          <div className="flex items-center gap-1 bg-[#080B16] p-1 rounded-xl border border-white/[0.08]">
             <button
               onClick={() => setTool('brush')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'brush'
-                  ? 'bg-gradient-to-r from-indigo-500 to-indigo-600 text-white font-semibold shadow-md shadow-indigo-500/25'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#7655F7] text-white font-semibold shadow-md shadow-[#7655F7]/30'
+                  : 'text-[#929BB3] hover:text-white'
               }`}
               title="Paintbrush"
             >
@@ -324,8 +324,8 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
               onClick={() => setTool('eraser')}
               className={`p-2 rounded-lg transition-all ${
                 tool === 'eraser'
-                  ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white font-semibold shadow-md shadow-rose-500/25'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-[#FF647C] text-white font-semibold shadow-md shadow-[#FF647C]/30'
+                  : 'text-[#929BB3] hover:text-white'
               }`}
               title="Eraser"
             >
@@ -342,7 +342,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
                   onClick={() => setColor(c)}
                   className={`w-6 h-6 rounded-full transition-transform border border-white/20 ${
                     color === c
-                      ? 'scale-125 ring-2 ring-indigo-400 ring-offset-2 ring-offset-[#080C16]'
+                      ? 'scale-125 ring-2 ring-[#28C7E8] ring-offset-2 ring-offset-[#080B16]'
                       : 'hover:scale-110'
                   }`}
                   style={{ backgroundColor: c }}
@@ -353,13 +353,13 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
           )}
 
           {/* Brush Sizes */}
-          <div className="flex items-center gap-1.5 bg-white/[0.04] p-1.5 rounded-xl border border-white/[0.08]">
+          <div className="flex items-center gap-1.5 bg-[#080B16] p-1.5 rounded-xl border border-white/[0.08]">
             {BRUSH_SIZES.map((sz) => (
               <button
                 key={sz}
                 onClick={() => setSize(sz)}
                 className={`w-7 h-7 flex items-center justify-center rounded-lg transition-all ${
-                  size === sz ? 'bg-indigo-500 text-white font-bold shadow-sm' : 'text-slate-400 hover:text-white'
+                  size === sz ? 'bg-[#7655F7] text-white font-bold shadow-sm' : 'text-[#929BB3] hover:text-white'
                 }`}
                 title={`Size ${sz}`}
               >
@@ -376,7 +376,7 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleUndo}
               disabled={strokes.length === 0}
-              className="p-2 rounded-xl bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all"
+              className="p-2 rounded-xl bg-[#181E32] text-[#F4F5FF] hover:bg-white/[0.1] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all cursor-pointer"
               title="Undo"
             >
               <Undo2 className="w-4 h-4" />
@@ -384,14 +384,14 @@ export const DrawingCanvas: React.FC<DrawingCanvasProps> = ({ roomCode, playerId
             <button
               onClick={handleRedo}
               disabled={undoneStrokes.length === 0}
-              className="p-2 rounded-xl bg-white/[0.04] text-slate-300 hover:text-white hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all"
+              className="p-2 rounded-xl bg-[#181E32] text-[#F4F5FF] hover:bg-white/[0.1] disabled:opacity-30 disabled:cursor-not-allowed border border-white/[0.08] transition-all cursor-pointer"
               title="Redo"
             >
               <Redo2 className="w-4 h-4" />
             </button>
             <button
               onClick={handleClear}
-              className="p-2 rounded-xl bg-rose-500/15 text-rose-300 hover:bg-rose-500/25 border border-rose-500/30 transition-all"
+              className="p-2 rounded-xl bg-[#FF647C]/15 text-[#FF647C] hover:bg-[#FF647C]/25 border border-[#FF647C]/30 transition-all cursor-pointer"
               title="Clear Canvas"
             >
               <Trash2 className="w-4 h-4" />

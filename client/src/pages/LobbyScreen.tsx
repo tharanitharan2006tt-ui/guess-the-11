@@ -98,14 +98,14 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
       <div className="max-w-5xl mx-auto w-full flex items-center justify-between pb-4 border-b border-white/[0.08] relative z-10">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="absolute inset-0 bg-indigo-500/20 rounded-xl blur-md" />
+            <div className="absolute inset-0 bg-[#7655F7]/20 rounded-xl blur-md" />
             <img src="/logo.svg" alt="Guess The 11" className="w-9 h-9 relative z-10" />
           </div>
           <div>
-            <h1 className="font-game font-extrabold text-lg sm:text-xl text-white tracking-tight">
+            <h1 className="font-bold text-lg sm:text-xl text-[#F4F5FF] tracking-tight">
               SQUAD LOBBY
             </h1>
-            <p className="text-[11px] text-indigo-300 font-sans font-medium tracking-wider uppercase">
+            <p className="text-[11px] text-[#A78BFA] font-medium tracking-wider uppercase">
               {roomState.settings.gameMode} Mode • {roomState.settings.category}
             </p>
           </div>
@@ -113,7 +113,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
 
         <button
           onClick={onLeave}
-          className="btn-glass-danger px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs cursor-pointer shadow-sm"
+          className="btn-glass-danger px-3.5 py-1.5 rounded-full flex items-center gap-1.5 text-xs cursor-pointer shadow-sm font-semibold"
         >
           <LogOut className="w-3.5 h-3.5" />
           <span>Leave Room</span>
@@ -123,37 +123,37 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
       {/* Main Content Area */}
       <div className="max-w-5xl mx-auto w-full flex-1 flex flex-col items-center justify-center py-6 relative z-10">
         {/* Room Code & Invite Card */}
-        <div className="w-full max-w-lg glass-card p-6 md:p-8 rounded-3xl text-center mb-6 relative overflow-hidden">
-          <span className="text-[11px] font-game font-semibold uppercase tracking-wider text-slate-400">
+        <div className="w-full max-w-lg glass-card p-6 md:p-8 rounded-2xl text-center mb-6 relative overflow-hidden">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-[#929BB3]">
             Room Invitation Code
           </span>
           <div className="flex items-center justify-center gap-3 my-2.5">
-            <span className="font-mono text-4xl sm:text-5xl font-extrabold tracking-widest text-white select-all drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)]">
+            <span className="font-mono text-4xl sm:text-5xl font-extrabold tracking-widest text-[#F4F5FF] select-all drop-shadow-[0_2px_12px_rgba(255,255,255,0.2)]">
               {roomState.code}
             </span>
             <button
               onClick={handleCopyLink}
-              className="p-2.5 rounded-2xl glass-pill hover:bg-white/[0.1] text-slate-200 transition-all cursor-pointer shadow-sm"
+              className="p-2.5 rounded-xl bg-white/[0.06] hover:bg-white/[0.12] text-[#F4F5FF] transition-all cursor-pointer border border-white/10"
               title="Copy Room Link"
             >
-              {copied ? <Check className="w-5 h-5 text-emerald-400" /> : <Copy className="w-5 h-5" />}
+              {copied ? <Check className="w-5 h-5 text-[#28DFA5]" /> : <Copy className="w-5 h-5" />}
             </button>
           </div>
 
           {/* Optional Room Password Display */}
           {hasPassword && (
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-pill text-xs font-mono text-amber-300 mb-3 border border-amber-500/30">
-              <Lock className="w-3.5 h-3.5 text-amber-400" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFC857]/10 text-xs font-mono text-[#FFC857] mb-3 border border-[#FFC857]/30">
+              <Lock className="w-3.5 h-3.5 text-[#FFC857]" />
               <span>PIN: <strong className="text-white font-bold">{roomState.settings.password}</strong></span>
             </div>
           )}
 
           {/* Waiting Status Badge */}
           <div className="block mb-4">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full glass-pill text-xs font-game font-semibold text-white">
-              <Users className="w-4 h-4 text-indigo-400" />
-              <span className="text-slate-400">WAITING FOR SQUAD:</span>
-              <span className="text-indigo-300 font-bold text-sm">{playerCount} / {maxPlayers}</span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-xs font-semibold text-[#F4F5FF]">
+              <Users className="w-4 h-4 text-[#7655F7]" />
+              <span className="text-[#929BB3]">WAITING FOR SQUAD:</span>
+              <span className="text-[#A78BFA] font-bold text-sm tabular-nums">{playerCount} / {maxPlayers}</span>
             </div>
           </div>
 
@@ -161,7 +161,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
           <div className="grid grid-cols-2 gap-3 max-w-sm mx-auto">
             <button
               onClick={handleWhatsAppShare}
-              className="py-2.5 px-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25 transition-all text-xs font-game font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="py-2.5 px-3 rounded-xl bg-[#28DFA5]/15 border border-[#28DFA5]/30 text-[#28DFA5] hover:bg-[#28DFA5]/25 transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 fill-current" />
               WhatsApp
@@ -169,7 +169,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
 
             <button
               onClick={handleNativeShare}
-              className="py-2.5 px-3 rounded-2xl bg-indigo-500/15 border border-indigo-500/30 text-indigo-300 hover:bg-indigo-500/25 transition-all text-xs font-game font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              className="py-2.5 px-3 rounded-xl bg-[#7655F7]/15 border border-[#7655F7]/30 text-[#A78BFA] hover:bg-[#7655F7]/25 transition-all text-xs font-bold flex items-center justify-center gap-2 shadow-sm cursor-pointer"
             >
               <Share2 className="w-4 h-4" />
               Share Link
@@ -189,23 +189,23 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
                 return (
                   <div
                     key={player.id}
-                    className={`p-4 rounded-3xl flex flex-col items-center justify-center text-center relative transition-all duration-300 ${
+                    className={`p-4 rounded-2xl flex flex-col items-center justify-center text-center relative transition-all duration-300 ${
                       isMe
-                        ? 'glass-card border-indigo-400/50 shadow-[0_0_24px_rgba(99,102,241,0.2)]'
+                        ? 'bg-[#181E32] border-2 border-[#7655F7]/70 shadow-[0_0_24px_rgba(118,85,247,0.25)]'
                         : isThisPlayerHost
-                        ? 'glass-card border-amber-400/40'
-                        : 'glass-card border-white/[0.08]'
+                        ? 'glass-card border border-[#FFC857]/50 shadow-[0_0_15px_rgba(255,200,87,0.15)]'
+                        : 'glass-card border border-white/[0.08]'
                     }`}
                   >
                     {/* Host crown badge */}
                     {isThisPlayerHost && (
-                      <div className="absolute top-2.5 right-2.5 p-1 rounded-full bg-amber-400 text-slate-950 shadow-sm" title="Room Host">
+                      <div className="absolute top-2.5 right-2.5 p-1 rounded-full bg-[#FFC857] text-[#080B16] shadow-sm" title="Room Host">
                         <Crown className="w-3 h-3 fill-current" />
                       </div>
                     )}
 
                     {/* Slot number badge */}
-                    <div className="absolute top-2.5 left-2.5 text-[10px] font-mono font-bold text-slate-500">
+                    <div className="absolute top-2.5 left-2.5 text-[10px] font-mono font-bold text-[#929BB3]">
                       #{String(slotNumber).padStart(2, '0')}
                     </div>
 
@@ -215,17 +215,17 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
                     </span>
 
                     {/* Username */}
-                    <p className="text-xs font-game font-bold text-white truncate max-w-full leading-tight">
+                    <p className="text-xs font-bold text-[#F4F5FF] truncate max-w-full leading-tight">
                       {player.username}
                     </p>
 
                     {/* Subtext */}
-                    <span className={`text-[10px] font-sans font-semibold mt-1 px-2.5 py-0.5 rounded-full ${
+                    <span className={`text-[10px] font-semibold mt-1 px-2.5 py-0.5 rounded-full ${
                       isMe
-                        ? 'bg-indigo-500/20 text-indigo-300'
+                        ? 'bg-[#7655F7]/25 text-[#A78BFA] border border-[#7655F7]/40'
                         : isThisPlayerHost
-                        ? 'bg-amber-500/20 text-amber-300'
-                        : 'bg-emerald-500/20 text-emerald-300'
+                        ? 'bg-[#FFC857]/20 text-[#FFC857] border border-[#FFC857]/30'
+                        : 'bg-[#28DFA5]/20 text-[#28DFA5] border border-[#28DFA5]/30'
                     }`}>
                       {isMe ? 'You' : isThisPlayerHost ? 'Host' : 'Ready'}
                     </span>
@@ -237,15 +237,15 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               return (
                 <div
                   key={`empty_${slotNumber}`}
-                  className="p-4 rounded-3xl border border-dashed border-white/[0.08] bg-white/[0.02] flex flex-col items-center justify-center text-center relative opacity-40 hover:opacity-60 transition-opacity"
+                  className="p-4 rounded-2xl border border-dashed border-white/[0.09] bg-white/[0.015] flex flex-col items-center justify-center text-center relative opacity-40 hover:opacity-60 transition-opacity"
                 >
-                  <div className="absolute top-2.5 left-2.5 text-[10px] font-mono text-slate-600">
+                  <div className="absolute top-2.5 left-2.5 text-[10px] font-mono text-[#929BB3]/60">
                     #{String(slotNumber).padStart(2, '0')}
                   </div>
-                  <div className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center my-2 text-slate-500 text-xs font-bold">
+                  <div className="w-9 h-9 rounded-full border border-white/10 flex items-center justify-center my-2 text-[#929BB3] text-xs font-bold">
                     ?
                   </div>
-                  <span className="text-[10px] font-sans text-slate-500 uppercase tracking-wider">Open Slot</span>
+                  <span className="text-[10px] text-[#929BB3] uppercase tracking-wider">Open Slot</span>
                 </div>
               );
             })}
@@ -255,7 +255,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
         {/* Start Game Action Area */}
         <div className="w-full max-w-md text-center">
           {startError && (
-            <div className="mb-4 p-3 rounded-2xl bg-rose-500/15 text-rose-300 text-xs font-semibold border border-rose-500/30 flex items-center justify-center gap-2 shadow-md">
+            <div className="mb-4 p-3 rounded-2xl bg-[#FF647C]/15 text-[#FF647C] text-xs font-semibold border border-[#FF647C]/30 flex items-center justify-center gap-2 shadow-md">
               <AlertCircle className="w-4 h-4 flex-shrink-0" />
               <span>{startError}</span>
             </div>
@@ -266,17 +266,17 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               <button
                 onClick={handleStartGame}
                 disabled={!canStart}
-                className={`w-full py-4 rounded-2xl font-game font-bold text-base tracking-wide flex items-center justify-center gap-2.5 transition-all shadow-lg ${
+                className={`w-full py-4 rounded-2xl font-bold text-base tracking-wide flex items-center justify-center gap-2.5 transition-all shadow-lg ${
                   canStart
-                    ? 'btn-glass-emerald text-white cursor-pointer'
-                    : 'bg-white/[0.04] text-slate-500 cursor-not-allowed border border-white/[0.08] opacity-60'
+                    ? 'btn-glass-emerald cursor-pointer'
+                    : 'bg-white/[0.04] text-[#929BB3] cursor-not-allowed border border-white/[0.08] opacity-60'
                 }`}
               >
                 <Play className="w-4 h-4 fill-current" />
                 Start Game ({playerCount}/{minPlayers})
               </button>
               {!canStart && (
-                <p className="text-xs text-slate-400 font-sans mt-2.5 font-medium">
+                <p className="text-xs text-[#929BB3] mt-2.5 font-medium">
                   {roomState.settings.gameMode === 'standard'
                     ? 'Standard mode requires all 11 players to start.'
                     : `Need at least ${minPlayers} players to start practice mode.`}
@@ -285,8 +285,8 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
             </div>
           ) : (
             <div className="p-4 rounded-2xl glass-card flex items-center justify-center gap-3">
-              <div className="w-2.5 h-2.5 rounded-full bg-indigo-400 animate-ping" />
-              <span className="text-xs font-game font-semibold text-slate-300">
+              <div className="w-2.5 h-2.5 rounded-full bg-[#7655F7] animate-ping" />
+              <span className="text-xs font-semibold text-[#F4F5FF]">
                 Waiting for host to start the game...
               </span>
             </div>

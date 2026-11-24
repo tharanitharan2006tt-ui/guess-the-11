@@ -95,37 +95,37 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
               return (
                 <div
                   key={p.id}
-                  className={`flex items-center justify-between p-3 rounded-2xl border transition-all ${
+                  className={`flex items-center justify-between p-3.5 rounded-2xl border transition-all ${
                     isFirst
-                      ? 'bg-gradient-to-r from-amber-500/15 to-yellow-500/10 border-amber-400/50 shadow-md shadow-amber-500/10'
+                      ? 'bg-[#111629] border-[#FFC857]/60 shadow-[0_0_20px_rgba(255,200,87,0.15)]'
                       : isSecond
-                      ? 'bg-white/[0.05] border-white/[0.12]'
+                      ? 'bg-[#111629] border-slate-400/40'
                       : isThird
-                      ? 'bg-white/[0.03] border-amber-600/30'
-                      : 'bg-white/[0.02] border-white/[0.06]'
+                      ? 'bg-[#111629] border-amber-700/40'
+                      : 'bg-[#111629] border-white/[0.06]'
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     {/* Rank Badge */}
                     <div className="w-7 h-7 flex items-center justify-center font-bold text-sm">
                       {isFirst ? (
-                        <Crown className="w-5 h-5 text-amber-400 animate-bounce-subtle" />
+                        <Crown className="w-5 h-5 text-[#FFC857] animate-bounce-subtle" />
                       ) : isSecond ? (
                         <Medal className="w-5 h-5 text-slate-300" />
                       ) : isThird ? (
-                        <Medal className="w-5 h-5 text-amber-600" />
+                        <Medal className="w-5 h-5 text-[#F97316]" />
                       ) : (
-                        <span className="text-slate-500 font-mono">#{index + 1}</span>
+                        <span className="text-[#929BB3] font-mono tabular-nums">#{index + 1}</span>
                       )}
                     </div>
 
                     {/* Avatar & Username */}
                     <span className="text-2xl select-none">{avatarObj.icon}</span>
                     <div>
-                      <p className="text-sm font-bold text-white leading-tight">
+                      <p className="text-sm font-bold text-[#F4F5FF] leading-tight">
                         {p.username}
                       </p>
-                      <p className="text-[10px] text-slate-400 font-sans leading-tight">
+                      <p className="text-[10px] text-[#929BB3] font-sans leading-tight tabular-nums">
                         {p.games_won} Wins • {p.games_played} Games
                       </p>
                     </div>
@@ -133,10 +133,10 @@ export const LeaderboardModal: React.FC<LeaderboardModalProps> = ({ isOpen, onCl
 
                   {/* Score */}
                   <div className="text-right">
-                    <span className="text-base font-bold text-amber-400">
+                    <span className="text-base font-bold text-[#FFC857] tabular-nums">
                       {p.total_score}
                     </span>
-                    <span className="text-[10px] text-slate-400 block -mt-1 font-semibold">PTS</span>
+                    <span className="text-[10px] text-[#929BB3] block -mt-1 font-semibold">PTS</span>
                   </div>
                 </div>
               );

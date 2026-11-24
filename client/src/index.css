@@ -4,21 +4,26 @@
 
 @layer base {
   body {
-    background: radial-gradient(130% 100% at 50% 0%, #111728 0%, #080C16 55%, #04060C 100%);
-    color: #F8FAFC;
-    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #080B16;
+    color: #F4F5FF;
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, .font-game, .font-gaming {
-    font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+    font-family: 'Outfit', 'Inter', system-ui, -apple-system, sans-serif;
     letter-spacing: -0.02em;
+  }
+
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
   }
 }
 
-/* Sleek Minimalist Glass Scrollbar */
+/* Minimalist Dark Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -31,155 +36,170 @@
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
-  backdrop-filter: blur(8px);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.25);
 }
 
 /* ===================================================
-   PREMIUM HUMAN-DESIGNED GLASSMORPHISM DESIGN TOKENS
+   COMMERCIAL GAMING DESIGN SYSTEM - SURFACE & GLASS
    =================================================== */
 
-/* Primary Frosted Glass Card */
+/* Primary Gaming Card: Dark Glass Surface #111629 */
 .glass-card {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  background: #111629;
   border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.065);
-  border-color: rgba(255, 255, 255, 0.16);
-  box-shadow: 0 16px 44px 0 rgba(0, 0, 0, 0.55), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
+  background: #141A32;
+  border-color: rgba(118, 85, 247, 0.35);
+  box-shadow: 0 14px 40px -10px rgba(0, 0, 0, 0.65), 0 0 20px -5px rgba(118, 85, 247, 0.15);
 }
 
-/* Glass Modal Container */
+/* Elevated Gaming Surface: #181E32 */
+.glass-elevated {
+  background: #181E32;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 0 12px 36px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+}
+
+/* Glass Modal Container: #0D1221 */
 .glass-modal {
-  background: rgba(11, 16, 30, 0.92);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  background: #0D1221;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 24px 60px -10px rgba(0, 0, 0, 0.75), inset 0 1px 1px 0 rgba(255, 255, 255, 0.12);
+  box-shadow: 0 25px 65px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
 }
 
 /* Glass Pill / Badge */
 .glass-pill {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
 }
 
-/* Glass Input */
+/* Gaming Input */
 .glass-input {
-  background: rgba(255, 255, 255, 0.035);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
+  background: #0B0F1C;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  color: #F4F5FF;
   transition: all 0.18s ease;
 }
 
 .glass-input:focus {
-  background: rgba(255, 255, 255, 0.06);
-  border-color: rgba(129, 140, 248, 0.6);
-  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  background: #0E1324;
+  border-color: #7655F7;
+  box-shadow: 0 0 0 3px rgba(118, 85, 247, 0.2);
   outline: none;
 }
 
 /* ===================================================
-   CLEAN HUMAN-DESIGNED GLASS BUTTONS
+   COMMERCIAL GAMING BUTTONS
    =================================================== */
 
-/* Primary Hero Button: Electric Indigo Gradient Glass */
+/* Primary Button: Vibrant Purple #7655F7 */
 .btn-glass-primary {
-  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #4F46E5 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 8px 24px -4px rgba(99, 102, 241, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #7655F7 0%, #5E3EE6 100%);
+  color: #F4F5FF;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 6px 20px -4px rgba(118, 85, 247, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   font-family: 'Outfit', sans-serif;
-  font-weight: 700;
+  font-weight: 600;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-glass-primary:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -4px rgba(139, 92, 246, 0.55), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 28px -4px rgba(118, 85, 247, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   filter: brightness(1.05);
 }
 
 .btn-glass-primary:active:not(:disabled) {
   transform: translateY(1px);
-  box-shadow: 0 4px 14px -2px rgba(99, 102, 241, 0.35);
+  box-shadow: 0 3px 10px -2px rgba(118, 85, 247, 0.3);
 }
 
-/* Emerald Action Button: Clean Glass */
+/* Accent Cyan Action Button: #28C7E8 */
+.btn-glass-cyan {
+  background: linear-gradient(135deg, #28C7E8 0%, #1BA8C6 100%);
+  color: #080B16;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px -4px rgba(40, 199, 232, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass-cyan:hover:not(:disabled) {
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 28px -4px rgba(40, 199, 232, 0.55);
+}
+
+.btn-glass-cyan:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Success Button: #28DFA5 */
 .btn-glass-emerald {
-  background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  box-shadow: 0 8px 24px -4px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #28DFA5 0%, #1CB987 100%);
+  color: #080B16;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 6px 20px -4px rgba(40, 223, 165, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.3);
   font-family: 'Outfit', sans-serif;
   font-weight: 700;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-glass-emerald:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -4px rgba(16, 185, 129, 0.55);
+  transform: translateY(-1.5px);
+  box-shadow: 0 10px 28px -4px rgba(40, 223, 165, 0.5);
 }
 
 .btn-glass-emerald:active:not(:disabled) {
   transform: translateY(1px);
 }
 
-/* Secondary Frosted Glass Button */
+/* Secondary Dark Surface Button: #181E32 */
 .btn-glass-secondary {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  color: #F1F5F9;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  background: #181E32;
+  color: #F4F5FF;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
   font-family: 'Outfit', sans-serif;
   font-weight: 600;
   transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .btn-glass-secondary:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.2);
+  background: #1F2740;
+  border-color: rgba(255, 255, 255, 0.16);
   transform: translateY(-1px);
   color: #FFFFFF;
 }
 
 .btn-glass-secondary:active:not(:disabled) {
   transform: translateY(1px);
-  background: rgba(255, 255, 255, 0.04);
+  background: #151B2E;
 }
 
-/* Danger / Leave Glass Button */
+/* Danger Button: #FF647C */
 .btn-glass-danger {
-  background: rgba(239, 68, 68, 0.12);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  color: #FCA5A5;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  background: rgba(255, 100, 124, 0.12);
+  color: #FF647C;
+  border: 1px solid rgba(255, 100, 124, 0.25);
   font-family: 'Outfit', sans-serif;
   font-weight: 600;
   transition: all 0.18s ease;
 }
 
 .btn-glass-danger:hover:not(:disabled) {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: rgba(239, 68, 68, 0.4);
-  color: #FFFFFF;
+  background: rgba(255, 100, 124, 0.2);
+  border-color: rgba(255, 100, 124, 0.4);
 }
 
 /* Backwards compatibility aliases */

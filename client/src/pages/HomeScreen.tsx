@@ -151,33 +151,33 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
 
         {/* Brand Banner */}
         <div className="text-center relative z-10 max-w-2xl mx-auto mb-9">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-indigo-300 text-xs font-game font-semibold tracking-wider uppercase mb-5 shadow-sm">
-            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-            11 Players • 11 Rounds • Real-Time Drawing
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full glass-pill text-[#A78BFA] text-xs font-semibold tracking-wider uppercase mb-5 border border-[#7655F7]/30 shadow-[0_0_15px_rgba(118,85,247,0.15)]">
+            <Sparkles className="w-3.5 h-3.5 text-[#28C7E8]" />
+            11 PLAYERS • 11 ROUNDS • REAL-TIME DRAWING
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-game font-extrabold tracking-tight text-white drop-shadow-sm">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight text-[#F4F5FF]">
             GUESS THE{' '}
-            <span className="bg-gradient-to-r from-indigo-400 via-violet-300 to-cyan-300 bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(99,102,241,0.35)]">
+            <span className="bg-gradient-to-r from-[#7655F7] via-[#A78BFA] to-[#28C7E8] bg-clip-text text-transparent drop-shadow-[0_4px_24px_rgba(118,85,247,0.4)]">
               11
             </span>
           </h1>
 
-          <p className="mt-3.5 text-sm md:text-base text-slate-300 font-sans font-normal max-w-lg mx-auto leading-relaxed">
-            The modern party game where players sketch secret words and guess in real-time. Gather your 11-player squad and battle for the crown!
+          <p className="mt-3.5 text-sm md:text-base text-[#929BB3] max-w-lg mx-auto leading-relaxed">
+            The premier competitive real-time drawing and guessing arena. 11 players enter, 11 fast-paced rounds, 1 victorious champion.
           </p>
         </div>
 
         {/* Error notification banner if any */}
         {errorMessage && (
-          <div className="w-full max-w-md mb-6 p-3.5 rounded-2xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold flex items-center justify-between gap-2.5 shadow-md">
+          <div className="w-full max-w-md mb-6 p-3.5 rounded-2xl bg-[#FF647C]/10 border border-[#FF647C]/30 text-[#FF647C] text-xs font-semibold flex items-center justify-between gap-2.5 shadow-md">
             <div className="flex items-center gap-2">
-              <ShieldAlert className="w-4 h-4 flex-shrink-0 text-rose-400" />
+              <ShieldAlert className="w-4 h-4 flex-shrink-0 text-[#FF647C]" />
               <span>{errorMessage}</span>
             </div>
             <button
               onClick={() => setIsServerSettingsOpen(true)}
-              className="text-[11px] underline font-game font-bold uppercase flex-shrink-0 text-indigo-300 cursor-pointer"
+              className="text-[11px] underline font-bold uppercase flex-shrink-0 text-[#28C7E8] cursor-pointer"
             >
               Settings
             </button>
@@ -186,54 +186,50 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
 
         {/* Action Center Grid */}
         <div className="w-full max-w-md mx-auto flex flex-col gap-3.5 relative z-10">
-          {/* Quick Play CTA - Clean Hero Glass Card */}
+          {/* Quick Play CTA - Primary Action */}
           <button
             onClick={handleQuickPlay}
             disabled={quickPlayLoading}
-            className="w-full p-4.5 rounded-3xl glass-card border border-white/10 hover:border-indigo-400/40 flex items-center justify-between group disabled:opacity-50 select-none cursor-pointer relative overflow-hidden transition-all duration-300"
+            className="w-full p-4.5 rounded-2xl bg-gradient-to-r from-[#7655F7] to-[#5838DF] hover:from-[#8B6BFF] hover:to-[#6A4BEF] border border-white/20 flex items-center justify-between group disabled:opacity-50 select-none cursor-pointer relative overflow-hidden transition-all duration-300 shadow-[0_8px_30px_rgba(118,85,247,0.35)]"
           >
-            {/* Subtle inner highlight */}
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
             <div className="flex items-center gap-3.5 relative z-10">
-              <div className="p-3 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)] group-hover:scale-105 transition-transform duration-300">
+              <div className="p-3 rounded-xl bg-white/10 text-[#F4F5FF] shadow-inner group-hover:scale-105 transition-transform duration-300">
                 {quickPlayLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  <Zap className="w-5 h-5 fill-current" />
+                  <Zap className="w-5 h-5 fill-current text-[#28C7E8]" />
                 )}
               </div>
               <div className="text-left">
-                <span className="block text-base font-game font-bold tracking-tight text-white group-hover:text-indigo-200 transition-colors">
+                <span className="block text-base font-bold tracking-tight text-[#F4F5FF]">
                   {quickPlayLoading ? 'Searching Match...' : 'Quick Play'}
                 </span>
-                <span className="block text-xs font-sans text-slate-400 font-medium">
-                  Instant Matchmaking
+                <span className="block text-xs text-[#F4F5FF]/70 font-medium">
+                  Instant Competitive Matchmaking
                 </span>
               </div>
             </div>
 
-            <div className="w-10 h-10 rounded-2xl glass-pill flex items-center justify-center text-slate-300 group-hover:text-white group-hover:border-indigo-400/50 group-hover:translate-x-1 transition-all relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-[#F4F5FF] group-hover:translate-x-1 transition-transform relative z-10">
               <Play className="w-4 h-4 fill-current ml-0.5" />
             </div>
           </button>
 
-          {/* Create Room & Join Room row - Frosted Glass Cards */}
+          {/* Create Room & Join Room row - Interactive Surface Cards */}
           <div className="grid grid-cols-2 gap-3.5">
             <button
               onClick={() => setIsCreateOpen(true)}
               disabled={isCreatingRoom}
-              className="p-4.5 rounded-3xl glass-card border border-white/10 hover:border-rose-400/40 text-left flex flex-col justify-between group select-none cursor-pointer disabled:opacity-50 min-h-[145px] transition-all duration-300 relative overflow-hidden"
+              className="p-4 rounded-2xl glass-card hover:border-[#7655F7]/50 text-left flex flex-col justify-between group select-none cursor-pointer disabled:opacity-50 min-h-[140px] transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-rose-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="p-2.5 rounded-2xl bg-rose-500/15 border border-rose-500/25 text-rose-300 w-fit mb-3 group-hover:scale-110 transition-transform relative z-10">
+              <div className="p-2.5 rounded-xl bg-[#7655F7]/15 border border-[#7655F7]/30 text-[#A78BFA] w-fit mb-3 group-hover:scale-110 transition-transform">
                 {isCreatingRoom ? <Loader2 className="w-5 h-5 animate-spin" /> : <PlusCircle className="w-5 h-5" />}
               </div>
-              <div className="relative z-10">
-                <h3 className="font-game font-bold text-base text-white group-hover:text-rose-200 transition-colors">
+              <div>
+                <h3 className="font-bold text-base text-[#F4F5FF] group-hover:text-[#A78BFA] transition-colors">
                   {isCreatingRoom ? 'Creating...' : 'Create Room'}
                 </h3>
-                <p className="text-[11px] font-sans text-slate-400 mt-0.5 font-medium">
+                <p className="text-[11px] text-[#929BB3] mt-0.5">
                   Host 11-player squad
                 </p>
               </div>
@@ -241,78 +237,89 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
 
             <button
               onClick={() => setIsJoinOpen(true)}
-              className="p-4.5 rounded-3xl glass-card border border-white/10 hover:border-cyan-400/40 text-left flex flex-col justify-between group select-none cursor-pointer min-h-[145px] transition-all duration-300 relative overflow-hidden"
+              className="p-4 rounded-2xl glass-card hover:border-[#28C7E8]/50 text-left flex flex-col justify-between group select-none cursor-pointer min-h-[140px] transition-all duration-300"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              <div className="p-2.5 rounded-2xl bg-cyan-500/15 border border-cyan-500/25 text-cyan-300 w-fit mb-3 group-hover:scale-110 transition-transform relative z-10">
+              <div className="p-2.5 rounded-xl bg-[#28C7E8]/15 border border-[#28C7E8]/30 text-[#28C7E8] w-fit mb-3 group-hover:scale-110 transition-transform">
                 <LogIn className="w-5 h-5" />
               </div>
-              <div className="relative z-10">
-                <h3 className="font-game font-bold text-base text-white group-hover:text-cyan-200 transition-colors">
+              <div>
+                <h3 className="font-bold text-base text-[#F4F5FF] group-hover:text-[#28C7E8] transition-colors">
                   Join Room
                 </h3>
-                <p className="text-[11px] font-sans text-slate-400 mt-0.5 font-medium">
-                  Enter 6-digit code
+                <p className="text-[11px] text-[#929BB3] mt-0.5">
+                  Enter 6-digit code or link
                 </p>
               </div>
             </button>
           </div>
 
-          {/* How to Play & Leaderboard row - Clean Glass Pill Buttons */}
+          {/* How to Play & Leaderboard row */}
           <div className="grid grid-cols-2 gap-3.5">
             <button
               onClick={() => setIsHowToPlayOpen(true)}
-              className="p-3.5 rounded-2xl btn-glass-secondary flex items-center justify-center gap-2 select-none cursor-pointer"
+              className="p-3.5 rounded-2xl btn-glass-secondary flex items-center justify-center gap-2 select-none cursor-pointer hover:border-[#28C7E8]/40"
             >
-              <HelpCircle className="w-4 h-4 text-cyan-400" />
-              <span className="text-xs font-game font-semibold">How to Play</span>
+              <HelpCircle className="w-4 h-4 text-[#28C7E8]" />
+              <span className="text-xs font-semibold text-[#F4F5FF]">How to Play</span>
             </button>
 
             <button
               onClick={() => setIsLeaderboardOpen(true)}
-              className="p-3.5 rounded-2xl btn-glass-secondary flex items-center justify-center gap-2 select-none cursor-pointer"
+              className="p-3.5 rounded-2xl btn-glass-secondary flex items-center justify-center gap-2 select-none cursor-pointer hover:border-[#FFC857]/40"
             >
-              <Trophy className="w-4 h-4 text-amber-400" />
-              <span className="text-xs font-game font-semibold">Leaderboard</span>
+              <Trophy className="w-4 h-4 text-[#FFC857]" />
+              <span className="text-xs font-semibold text-[#F4F5FF]">Leaderboard</span>
             </button>
           </div>
         </div>
 
-        {/* Feature Highlights Row - Sleek Glass Cards */}
-        <div className="mt-14 grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl w-full">
-          <div className="p-5 rounded-3xl glass-card text-center group hover:border-indigo-400/30 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+        {/* Feature Sections (4 Cards: 11 Player Arena, Real-Time Drawing, Competitive Leaderboard, Play With Friends) */}
+        <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl w-full">
+          <div className="p-5 rounded-2xl glass-card text-center group hover:border-[#7655F7]/40 transition-all">
+            <div className="w-11 h-11 rounded-xl bg-[#7655F7]/15 border border-[#7655F7]/30 text-[#A78BFA] mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <Users className="w-5 h-5" />
             </div>
-            <h4 className="font-game font-bold text-white text-sm">
+            <h4 className="font-bold text-[#F4F5FF] text-sm">
               11 Player Arena
             </h4>
-            <p className="text-xs text-slate-400 font-sans mt-1.5 leading-relaxed">
-              Designed for full 11-player matches where every squad member rotates to sketch on the canvas.
+            <p className="text-xs text-[#929BB3] mt-1.5 leading-relaxed">
+              Full 11-player lobby. 11 rounds. Every player rotates to sketch on the canvas.
             </p>
           </div>
 
-          <div className="p-5 rounded-3xl glass-card text-center group hover:border-cyan-400/30 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <div className="p-5 rounded-2xl glass-card text-center group hover:border-[#28C7E8]/40 transition-all">
+            <div className="w-11 h-11 rounded-xl bg-[#28C7E8]/15 border border-[#28C7E8]/30 text-[#28C7E8] mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <Palette className="w-5 h-5" />
             </div>
-            <h4 className="font-game font-bold text-white text-sm">
+            <h4 className="font-bold text-[#F4F5FF] text-sm">
               Real-Time Drawing
             </h4>
-            <p className="text-xs text-slate-400 font-sans mt-1.5 leading-relaxed">
-              Ultra-responsive canvas with artist color palette, variable sizes, eraser, undo, and live cloud sync.
+            <p className="text-xs text-[#929BB3] mt-1.5 leading-relaxed">
+              Sub-millisecond canvas with 12 studio colors, sizes, eraser, undo, and live cloud sync.
             </p>
           </div>
 
-          <div className="p-5 rounded-3xl glass-card text-center group hover:border-purple-400/30 transition-all">
-            <div className="w-11 h-11 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+          <div className="p-5 rounded-2xl glass-card text-center group hover:border-[#FFC857]/40 transition-all">
+            <div className="w-11 h-11 rounded-xl bg-[#FFC857]/15 border border-[#FFC857]/30 text-[#FFC857] mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
               <Trophy className="w-5 h-5" />
             </div>
-            <h4 className="font-game font-bold text-white text-sm">
-              Fair Scoring Rules
+            <h4 className="font-bold text-[#F4F5FF] text-sm">
+              Competitive Ranks
             </h4>
-            <p className="text-xs text-slate-400 font-sans mt-1.5 leading-relaxed">
-              +1 point for fast correct guesses, +1 drawer bonus, and a -5 penalty if nobody guesses correctly!
+            <p className="text-xs text-[#929BB3] mt-1.5 leading-relaxed">
+              Climb global leaderboards, earn victory points, and claim the champion's gold podium.
+            </p>
+          </div>
+
+          <div className="p-5 rounded-2xl glass-card text-center group hover:border-[#28DFA5]/40 transition-all">
+            <div className="w-11 h-11 rounded-xl bg-[#28DFA5]/15 border border-[#28DFA5]/30 text-[#28DFA5] mx-auto flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <h4 className="font-bold text-[#F4F5FF] text-sm">
+              Play With Friends
+            </h4>
+            <p className="text-xs text-[#929BB3] mt-1.5 leading-relaxed">
+              Private rooms with custom PINs, instant WhatsApp invites, and cross-platform play.
             </p>
           </div>
         </div>

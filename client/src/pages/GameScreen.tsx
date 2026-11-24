@@ -265,32 +265,32 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* OVERLAY 1: ROUND RESULT (Intermission between rounds) */}
       {roundResult && !gameOverResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-xl animate-in zoom-in-95 duration-200">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in zoom-in-95 duration-200">
           <div className="w-full max-w-md glass-modal rounded-3xl p-6 text-center relative overflow-hidden border border-white/10 shadow-2xl">
-            <span className="text-xs font-semibold tracking-wider text-slate-400 uppercase">
+            <span className="text-xs font-semibold tracking-wider text-[#929BB3] uppercase">
               Round {roundResult.round} Finished
             </span>
 
-            <h3 className="text-xl sm:text-2xl font-bold text-white uppercase mt-2">
+            <h3 className="text-xl sm:text-2xl font-bold text-[#F4F5FF] uppercase mt-2">
               The Word Was:
             </h3>
 
-            <div className="my-3 py-2.5 px-6 rounded-2xl bg-amber-400/15 border border-amber-400/40 inline-block shadow-inner">
-              <span className="text-2xl sm:text-3xl font-bold text-amber-300 tracking-wider">
+            <div className="my-3 py-2.5 px-6 rounded-2xl bg-[#FFC857]/15 border border-[#FFC857]/40 inline-block shadow-inner">
+              <span className="text-2xl sm:text-3xl font-bold text-[#FFC857] tracking-wider">
                 {roundResult.word}
               </span>
             </div>
 
             {/* Score Delta Breakdown */}
-            <div className="my-4 p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] space-y-2 text-xs">
+            <div className="my-4 p-3.5 rounded-2xl bg-[#111629] border border-white/[0.08] space-y-2 text-xs">
               {/* Drawer Outcome */}
               <div className="flex items-center justify-between pb-2 border-b border-white/[0.06]">
-                <span className="text-slate-300 font-medium">
+                <span className="text-[#F4F5FF] font-medium">
                   Drawer: {roundResult.drawerName}
                 </span>
                 <span
-                  className={`font-semibold text-sm ${
-                    roundResult.drawerPointsAwarded > 0 ? 'text-emerald-400' : 'text-rose-400'
+                  className={`font-semibold text-sm tabular-nums ${
+                    roundResult.drawerPointsAwarded > 0 ? 'text-[#28DFA5]' : 'text-[#FF647C]'
                   }`}
                 >
                   {roundResult.drawerPointsAwarded > 0
@@ -301,17 +301,17 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
               {/* Correct Guessers */}
               <div className="text-left">
-                <span className="text-[11px] font-semibold text-slate-400 uppercase">
+                <span className="text-[11px] font-semibold text-[#929BB3] uppercase">
                   Correct Guessers ({roundResult.correctGuessers.length}):
                 </span>
                 {roundResult.correctGuessers.length === 0 ? (
-                  <p className="text-slate-500 italic mt-0.5">Nobody guessed correctly this round!</p>
+                  <p className="text-[#929BB3] italic mt-0.5">Nobody guessed correctly this round!</p>
                 ) : (
                   <div className="flex flex-wrap gap-1.5 mt-1.5">
                     {roundResult.correctGuessers.map((g) => (
                       <span
                         key={g.playerId}
-                        className="px-2.5 py-1 rounded-xl bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 text-[11px] font-semibold"
+                        className="px-2.5 py-1 rounded-xl bg-[#28DFA5]/15 text-[#28DFA5] border border-[#28DFA5]/30 text-[11px] font-semibold tabular-nums"
                       >
                         {g.username} (+1 pt)
                       </span>
@@ -321,7 +321,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               </div>
             </div>
 
-            <p className="text-xs text-indigo-400 font-semibold animate-pulse">
+            <p className="text-xs text-[#28C7E8] font-semibold animate-pulse">
               Starting next round shortly...
             </p>
           </div>
@@ -330,21 +330,21 @@ export const GameScreen: React.FC<GameScreenProps> = ({
 
       {/* OVERLAY 2: FINAL GAME OVER & WINNER SCREEN */}
       {gameOverResult && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-xl animate-in zoom-in-95 duration-300">
-          <div className="w-full max-w-lg glass-modal border border-amber-400/40 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden max-h-[92vh] flex flex-col">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-xl animate-in zoom-in-95 duration-300">
+          <div className="w-full max-w-lg glass-modal border border-[#FFC857]/40 rounded-3xl p-6 shadow-2xl text-center relative overflow-hidden max-h-[92vh] flex flex-col">
             {/* Title */}
-            <span className="text-xs font-bold uppercase tracking-wider text-amber-400 mb-1">
-              🏆 GAME COMPLETED 🏆
+            <span className="text-xs font-bold uppercase tracking-wider text-[#FFC857] mb-1">
+              🏆 MATCH RESULTS 🏆
             </span>
-            <h2 className="text-3xl sm:text-4xl font-bold text-white uppercase drop-shadow-sm">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[#F4F5FF] uppercase drop-shadow-sm">
               {gameOverResult.winner?.username} WINS!
             </h2>
 
             {/* Podium (Top 3) */}
             <div className="my-5 grid grid-cols-3 gap-2.5 items-end max-w-md mx-auto w-full pt-4">
-              {/* 2nd Place */}
+              {/* 2nd Place - Silver */}
               {gameOverResult.podium[1] && (
-                <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.1] backdrop-blur-md flex flex-col items-center">
+                <div className="p-3 rounded-2xl bg-[#111629] border border-slate-400/40 backdrop-blur-md flex flex-col items-center shadow-md">
                   <Medal className="w-6 h-6 text-slate-300 mb-1" />
                   <span className="text-2xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.podium[1].avatar)?.icon || '🥈'}
@@ -352,46 +352,46 @@ export const GameScreen: React.FC<GameScreenProps> = ({
                   <p className="text-xs font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.podium[1].username}
                   </p>
-                  <span className="text-sm font-semibold text-slate-300">
+                  <span className="text-sm font-semibold text-slate-300 tabular-nums">
                     {gameOverResult.podium[1].score} pts
                   </span>
-                  <span className="text-[10px] text-slate-400 font-medium">2nd Place</span>
+                  <span className="text-[10px] text-[#929BB3] font-medium">2nd Place</span>
                 </div>
               )}
 
-              {/* 1st Place (Champion) */}
+              {/* 1st Place (Champion) - Gold */}
               {gameOverResult.winner && (
-                <div className="p-4 rounded-2xl bg-gradient-to-b from-amber-500/20 to-yellow-600/10 border-2 border-amber-400/60 flex flex-col items-center shadow-lg shadow-amber-500/10 scale-105">
-                  <Crown className="w-8 h-8 text-amber-400 mb-1 animate-bounce" />
+                <div className="p-4 rounded-2xl bg-gradient-to-b from-[#FFC857]/20 to-[#FFC857]/5 border-2 border-[#FFC857] flex flex-col items-center shadow-[0_0_25px_rgba(255,200,87,0.25)] scale-105">
+                  <Crown className="w-8 h-8 text-[#FFC857] mb-1 animate-bounce" />
                   <span className="text-3xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.winner.avatar)?.icon || '👑'}
                   </span>
                   <p className="text-sm font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.winner.username}
                   </p>
-                  <span className="text-lg font-bold text-amber-400">
+                  <span className="text-lg font-bold text-[#FFC857] tabular-nums">
                     {gameOverResult.winner.score} pts
                   </span>
-                  <span className="text-[10px] text-amber-300 font-bold uppercase tracking-wider">
+                  <span className="text-[10px] text-[#FFC857] font-bold uppercase tracking-wider">
                     Champion
                   </span>
                 </div>
               )}
 
-              {/* 3rd Place */}
+              {/* 3rd Place - Bronze */}
               {gameOverResult.podium[2] && (
-                <div className="p-3 rounded-2xl bg-white/[0.04] border border-white/[0.1] backdrop-blur-md flex flex-col items-center">
-                  <Medal className="w-6 h-6 text-amber-600 mb-1" />
+                <div className="p-3 rounded-2xl bg-[#111629] border border-amber-700/50 backdrop-blur-md flex flex-col items-center shadow-md">
+                  <Medal className="w-6 h-6 text-[#F97316] mb-1" />
                   <span className="text-2xl select-none">
                     {AVATARS.find((a) => a.id === gameOverResult.podium[2].avatar)?.icon || '🥉'}
                   </span>
                   <p className="text-xs font-bold text-white truncate max-w-full mt-1">
                     {gameOverResult.podium[2].username}
                   </p>
-                  <span className="text-sm font-semibold text-amber-500">
+                  <span className="text-sm font-semibold text-[#F97316] tabular-nums">
                     {gameOverResult.podium[2].score} pts
                   </span>
-                  <span className="text-[10px] text-slate-400 font-medium">3rd Place</span>
+                  <span className="text-[10px] text-[#929BB3] font-medium">3rd Place</span>
                 </div>
               )}
             </div>
@@ -401,13 +401,13 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               {gameOverResult.leaderboard.map((p, idx) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-white/[0.03] border border-white/[0.06]"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-[#111629] border border-white/[0.06]"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="font-mono text-slate-400 font-bold w-5">#{idx + 1}</span>
+                    <span className="font-mono text-[#929BB3] font-bold w-5">#{idx + 1}</span>
                     <span className="font-semibold text-white">{p.username}</span>
                   </div>
-                  <span className="font-bold text-amber-400">{p.score} pts</span>
+                  <span className="font-bold text-[#FFC857] tabular-nums">{p.score} pts</span>
                 </div>
               ))}
             </div>
@@ -417,20 +417,20 @@ export const GameScreen: React.FC<GameScreenProps> = ({
               {roomState.hostId === currentUserId ? (
                 <button
                   onClick={handlePlayAgain}
-                  className="btn-glass-emerald py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold text-white"
+                  className="btn-glass-emerald py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold"
                 >
                   <RotateCcw className="w-4 h-4" />
                   Play Again
                 </button>
               ) : (
-                <div className="py-3 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-slate-400 text-xs font-medium flex items-center justify-center">
+                <div className="py-3 px-4 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[#929BB3] text-xs font-medium flex items-center justify-center">
                   Waiting for host...
                 </div>
               )}
 
               <button
                 onClick={onReturnHome}
-                className="btn-glass-secondary py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold text-slate-200"
+                className="btn-glass-secondary py-3 px-4 rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wide cursor-pointer font-semibold text-[#F4F5FF]"
               >
                 <Home className="w-4 h-4" />
                 Return Home
