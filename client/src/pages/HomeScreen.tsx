@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserProfile } from '../services/supabase';
-import { socketService } from '../services/socket';
+import { socketService, ConnectionStatus } from '../services/socket';
 import {
   Play,
   PlusCircle,
@@ -38,6 +38,7 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [isServerSettingsOpen, setIsServerSettingsOpen] = useState(false);
   const [isServerConnected, setIsServerConnected] = useState(socketService.isConnected());
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(socketService.getStatus());
   const [currentServerUrl, setCurrentServerUrl] = useState(socketService.getServerUrl());
 
   const [quickPlayLoading, setQuickPlayLoading] = useState(false);
@@ -45,9 +46,10 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const unsub = socketService.onConnectionChange((connected, url) => {
+    const unsub = socketService.onConnectionChange((connected, url, status) => {
       setIsServerConnected(connected);
       setCurrentServerUrl(url);
+      setConnectionStatus(status);
     });
     return unsub;
   }, []);
@@ -59,7 +61,8 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
     try {
       const backendUrl = socketService.getServerUrl();
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 4000);
+      // Allow up to 35 seconds for cloud server cold wake-up
+      const timer = setTimeout(() => controller.abort(), 35000);
 
       const res = await fetch(`${backendUrl}/api/rooms/quick-play`, {
         signal: controller.signal,
@@ -78,11 +81,11 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         if (createRes.success && createRes.roomCode) {
           navigate(`/room/${createRes.roomCode}`);
         } else {
-          setErrorMessage(createRes.error || 'Failed to matchmake. Ensure server is online.');
+          setErrorMessage(createRes.error || 'Failed to matchmake. Please wait a moment and try again.');
         }
       }
     } catch {
-      setErrorMessage(`Cannot reach server at ${currentServerUrl}. Please configure Server Address.`);
+      setErrorMessage(`Server connection took longer than expected. Please wait a moment and tap Quick Play again.`);
     } finally {
       setQuickPlayLoading(false);
     }
@@ -133,18 +136,18 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
         <div className="absolute top-48 left-1/4 w-[380px] h-[280px] bg-purple-600/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute top-36 right-1/4 w-[320px] h-[240px] bg-cyan-500/10 rounded-full blur-[110px] pointer-events-none" />
 
-        {/* Server Disconnected Banner */}
+        {/* Automatic Server Connection Status Banner */}
         {!isServerConnected && (
           <div
             onClick={() => setIsServerSettingsOpen(true)}
-            className="w-full max-w-md mb-6 p-3.5 rounded-2xl glass-card border border-amber-500/30 text-amber-300 text-xs font-semibold flex items-center justify-between shadow-lg cursor-pointer hover:bg-amber-500/10 transition-all"
+            className="w-full max-w-md mb-6 p-3.5 rounded-2xl glass-card border border-[#7655F7]/30 bg-[#7655F7]/10 text-indigo-200 text-xs font-semibold flex items-center justify-between shadow-lg cursor-pointer hover:bg-[#7655F7]/20 transition-all animate-pulse"
           >
             <div className="flex items-center gap-2.5">
-              <Server className="w-4 h-4 text-amber-400 flex-shrink-0 animate-pulse" />
-              <span className="truncate">Server disconnected ({currentServerUrl})</span>
+              <Loader2 className="w-4 h-4 text-[#28C7E8] flex-shrink-0 animate-spin" />
+              <span>Connecting to Server... Please wait a few moments</span>
             </div>
-            <span className="text-[11px] underline font-bold uppercase tracking-wide flex-shrink-0 ml-2">
-              Configure ⚙️
+            <span className="text-[11px] text-[#28C7E8] font-bold uppercase tracking-wider flex-shrink-0 ml-2">
+              Waking up...
             </span>
           </div>
         )}
@@ -202,10 +205,14 @@ export const HomeScreen: React.FC<HomeScreenProps> = ({ profile, onProfileUpdate
               </div>
               <div className="text-left">
                 <span className="block text-base font-bold tracking-tight text-[#F4F5FF]">
-                  {quickPlayLoading ? 'Finding Players...' : 'Play Now (Quick Match)'}
+                  {quickPlayLoading
+                    ? (!isServerConnected ? 'Waking up Server... Please wait' : 'Finding Players...')
+                    : 'Play Now (Quick Match)'}
                 </span>
                 <span className="block text-xs text-[#F4F5FF]/80 font-medium">
-                  Tap to play instantly with other players
+                  {quickPlayLoading
+                    ? 'Connecting to 24/7 cloud server, please wait a few moments...'
+                    : 'Tap to play instantly with other players'}
                 </span>
               </div>
             </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Server, Check, Globe, RefreshCw, AlertCircle } from 'lucide-react';
-import { socketService } from '../services/socket';
+import { socketService, ConnectionStatus } from '../services/socket';
 
 interface ServerSettingsModalProps {
   isOpen: boolean;
@@ -20,6 +20,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
   const [currentUrl, setCurrentUrl] = useState<string>(socketService.getServerUrl());
   const [inputUrl, setInputUrl] = useState<string>(socketService.getServerUrl());
   const [isConnected, setIsConnected] = useState<boolean>(socketService.isConnected());
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(socketService.getStatus());
   const [testStatus, setTestStatus] = useState<{ testing: boolean; success?: boolean; message?: string } | null>(null);
 
   useEffect(() => {
@@ -41,11 +42,13 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
       setCurrentUrl(activeUrl);
       setInputUrl(activeUrl);
       setIsConnected(socketService.isConnected());
+      setConnectionStatus(socketService.getStatus());
       setTestStatus(null);
 
       // Listen to live socket connection changes
-      const unsub = socketService.onConnectionChange((connected) => {
+      const unsub = socketService.onConnectionChange((connected, _url, status) => {
         setIsConnected(connected);
+        setConnectionStatus(status);
       });
 
       // Auto-test active URL so user immediately sees connectivity
@@ -126,9 +129,21 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
                 SERVER SETTINGS
               </h2>
               <div className="flex items-center gap-1.5 mt-0.5">
-                <span className={`w-2 h-2 rounded-full ${isConnected ? 'bg-emerald-400 animate-pulse' : 'bg-rose-400'}`} />
+                <span
+                  className={`w-2 h-2 rounded-full ${
+                    isConnected
+                      ? 'bg-emerald-400 animate-pulse'
+                      : connectionStatus === 'connecting'
+                      ? 'bg-amber-400 animate-pulse'
+                      : 'bg-rose-400'
+                  }`}
+                />
                 <span className="text-[11px] font-sans text-slate-400">
-                  {isConnected ? 'Server Online' : 'Server Offline'}
+                  {isConnected
+                    ? 'Server Online (Connected)'
+                    : connectionStatus === 'connecting'
+                    ? 'Connecting to Cloud Server...'
+                    : 'Server Offline'}
                 </span>
               </div>
             </div>

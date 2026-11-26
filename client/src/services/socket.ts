@@ -51,13 +51,25 @@ export const getBackendUrl = (): string => {
   return DEFAULT_SERVER_URL;
 };
 
-type ConnectionListener = (connected: boolean, url: string) => void;
+export type ConnectionStatus = 'connecting' | 'connected' | 'disconnected';
+type ConnectionListener = (connected: boolean, url: string, status: ConnectionStatus) => void;
 
 class SocketService {
   public socket: Socket | null = null;
   public currentSecretWord: { word: string; category: string; hint?: string } | null = null;
   private url: string = getBackendUrl();
   private connectionListeners: ConnectionListener[] = [];
+  public status: ConnectionStatus = 'connecting';
+
+  constructor() {
+    // Automatically connect to backend server on app launch
+    if (typeof window !== 'undefined') {
+      setTimeout(() => {
+        this.connect();
+        this.pingHealth();
+      }, 50);
+    }
+  }
 
   public getServerUrl(): string {
     return this.url;
@@ -67,17 +79,45 @@ class SocketService {
     return Boolean(this.socket && this.socket.connected);
   }
 
+  public getStatus(): ConnectionStatus {
+    if (this.isConnected()) return 'connected';
+    return this.status;
+  }
+
   public onConnectionChange(listener: ConnectionListener): () => void {
     this.connectionListeners.push(listener);
     // Immediately invoke with current state
-    listener(this.isConnected(), this.url);
+    listener(this.isConnected(), this.url, this.getStatus());
     return () => {
       this.connectionListeners = this.connectionListeners.filter((l) => l !== listener);
     };
   }
 
-  private notifyConnection(connected: boolean): void {
-    this.connectionListeners.forEach((l) => l(connected, this.url));
+  private notifyConnection(connected: boolean, forcedStatus?: ConnectionStatus): void {
+    this.status = forcedStatus || (connected ? 'connected' : 'connecting');
+    this.connectionListeners.forEach((l) => l(connected, this.url, this.status));
+  }
+
+  // Ping health endpoint to wake up Render cloud backend immediately on app launch
+  public async pingHealth(): Promise<boolean> {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 45000);
+      const res = await fetch(`${this.url}/health`, {
+        signal: controller.signal,
+        headers: { 'Bypass-Tunnel-Reminder': 'true' }
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        if (!this.isConnected()) {
+          this.connect();
+        }
+        return true;
+      }
+    } catch {
+      // Ignored: socket reconnection loop will automatically connect once server finishes waking up
+    }
+    return false;
   }
 
   public setServerUrl(newUrl: string): void {
@@ -100,29 +140,35 @@ class SocketService {
         this.socket.disconnect();
       }
 
+      this.status = 'connecting';
+      this.notifyConnection(false, 'connecting');
+
       this.socket = io(this.url, {
         transports: ['polling', 'websocket'],
         autoConnect: true,
         reconnection: true,
-        reconnectionAttempts: 25,
+        reconnectionAttempts: Infinity,
         reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-        timeout: 15000
+        reconnectionDelayMax: 4000,
+        timeout: 30000
       });
 
       this.socket.on('connect', () => {
         console.log(`[Socket] Connected to backend: ${this.url} (${this.socket?.id})`);
-        this.notifyConnection(true);
+        this.status = 'connected';
+        this.notifyConnection(true, 'connected');
       });
 
       this.socket.on('disconnect', (reason) => {
         console.warn(`[Socket] Disconnected: ${reason}`);
-        this.notifyConnection(false);
+        this.status = 'connecting';
+        this.notifyConnection(false, 'connecting');
       });
 
       this.socket.on('connect_error', (err) => {
         console.warn(`[Socket] Connection error to ${this.url}:`, err.message);
-        this.notifyConnection(false);
+        this.status = 'connecting';
+        this.notifyConnection(false, 'connecting');
       });
 
       this.socket.on(SOCKET_EVENTS.SECRET_WORD, (data: any) => {
@@ -151,7 +197,8 @@ class SocketService {
     if (this.socket) {
       this.socket.disconnect();
       this.socket = null;
-      this.notifyConnection(false);
+      this.status = 'disconnected';
+      this.notifyConnection(false, 'disconnected');
     }
   }
 
@@ -159,7 +206,7 @@ class SocketService {
   private emitWithTimeout<T>(
     event: string,
     payload: any,
-    timeoutMs: number = 15000
+    timeoutMs: number = 35000
   ): Promise<T> {
     return new Promise((resolve) => {
       const s = this.getSocket();

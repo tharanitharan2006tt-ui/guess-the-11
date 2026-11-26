@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { UserProfile, AVATARS } from '../services/supabase';
 import { sounds } from '../utils/sound';
 import { socketService } from '../services/socket';
-import { Volume2, VolumeX, Shield, Trophy, HelpCircle, Server } from 'lucide-react';
+import { Volume2, VolumeX, Shield, Trophy, HelpCircle, Server, RefreshCw } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ConnectionStatus } from '../services/socket';
 
 interface NavbarProps {
   profile: UserProfile;
@@ -22,10 +23,12 @@ export const Navbar: React.FC<NavbarProps> = ({
 }) => {
   const [soundEnabled, setSoundEnabled] = useState(sounds.enabled);
   const [isServerConnected, setIsServerConnected] = useState(socketService.isConnected());
+  const [connectionStatus, setConnectionStatus] = useState<ConnectionStatus>(socketService.getStatus());
 
   useEffect(() => {
-    const unsub = socketService.onConnectionChange((connected) => {
+    const unsub = socketService.onConnectionChange((connected, _url, status) => {
       setIsServerConnected(connected);
+      setConnectionStatus(status);
     });
     return unsub;
   }, []);
@@ -94,17 +97,37 @@ export const Navbar: React.FC<NavbarProps> = ({
           {onOpenServerSettings && (
             <button
               onClick={onOpenServerSettings}
-              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-game font-semibold border backdrop-blur-md transition-all cursor-pointer ${
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-semibold border backdrop-blur-md transition-all cursor-pointer ${
                 isServerConnected
                   ? 'bg-emerald-500/10 border-emerald-500/25 text-emerald-300 hover:bg-emerald-500/20'
+                  : connectionStatus === 'connecting'
+                  ? 'bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20'
                   : 'bg-rose-500/10 border-rose-500/30 text-rose-300 hover:bg-rose-500/20 animate-pulse'
               }`}
-              title="Click to configure Server Address"
+              title={
+                isServerConnected
+                  ? 'Connected to 24/7 Cloud Server'
+                  : connectionStatus === 'connecting'
+                  ? 'Connecting to server... Please wait a few moments'
+                  : 'Server Offline. Click to configure'
+              }
             >
-              <span className={`w-2 h-2 rounded-full ${isServerConnected ? 'bg-emerald-400 shadow-[0_0_8px_#34d399]' : 'bg-rose-400 shadow-[0_0_8px_#f87171]'}`} />
-              <span className="hidden sm:inline text-[11px]">
-                {isServerConnected ? '24/7 Cloud' : 'Offline'}
-              </span>
+              {isServerConnected ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                  <span className="hidden sm:inline text-[11px] font-bold">24/7 Cloud</span>
+                </>
+              ) : connectionStatus === 'connecting' ? (
+                <>
+                  <RefreshCw className="w-3 h-3 animate-spin text-amber-400" />
+                  <span className="hidden sm:inline text-[11px] font-bold">Connecting...</span>
+                </>
+              ) : (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-rose-400 shadow-[0_0_8px_#f87171]" />
+                  <span className="hidden sm:inline text-[11px] font-bold">Offline</span>
+                </>
+              )}
             </button>
           )}
 
