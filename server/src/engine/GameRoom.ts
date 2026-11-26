@@ -207,7 +207,7 @@ export class GameRoom {
     }
 
     this.status = 'in_progress';
-    this.totalRounds = playerCount; // Each player draws once
+    this.totalRounds = 11; // GUESS THE 11: Compulsorily 11 rounds for every match
     this.currentRound = 0;
     this.gameId = `game_${Date.now()}_${this.code}`;
 
@@ -243,7 +243,19 @@ export class GameRoom {
     }
 
     this.currentRound += 1;
-    this.currentDrawerId = this.drawerRotationOrder[this.currentRound - 1];
+    // Determine drawer: cycle through drawerRotationOrder for all 11 rounds
+    const orderLen = this.drawerRotationOrder.length;
+    let targetDrawerId = orderLen > 0 ? this.drawerRotationOrder[(this.currentRound - 1) % orderLen] : '';
+
+    // If target drawer disconnected or left, fallback to any available connected player
+    if (!this.players.has(targetDrawerId) || !this.players.get(targetDrawerId)?.isConnected) {
+      const activePlayers = Array.from(this.players.values()).filter(p => p.isConnected);
+      if (activePlayers.length > 0) {
+        targetDrawerId = activePlayers[(this.currentRound - 1) % activePlayers.length].id;
+      }
+    }
+
+    this.currentDrawerId = targetDrawerId;
     const drawer = this.players.get(this.currentDrawerId);
     if (drawer) {
       drawer.hasDrawn = true;

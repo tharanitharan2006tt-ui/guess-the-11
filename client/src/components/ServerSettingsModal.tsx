@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Server, Check, Wifi, Globe, Laptop, RefreshCw, AlertCircle } from 'lucide-react';
+import { X, Server, Check, Globe, RefreshCw, AlertCircle } from 'lucide-react';
 import { socketService } from '../services/socket';
 
 interface ServerSettingsModalProps {
@@ -12,19 +12,7 @@ const PRESETS = [
     name: 'Live Cloud Server (Recommended - 24/7 Global)',
     url: 'https://guess-the-11-backend.onrender.com',
     icon: Globe,
-    description: 'Permanent 24/7 Render Cloud Server - Play anywhere on ANY Wi-Fi or 4G/5G'
-  },
-  {
-    name: 'Home Wi-Fi (Same Network)',
-    url: 'http://10.92.131.244:4000',
-    icon: Wifi,
-    description: 'Use when your phone is connected to the same Wi-Fi'
-  },
-  {
-    name: 'Localhost (This PC)',
-    url: 'http://localhost:4000',
-    icon: Laptop,
-    description: 'For testing directly on developer PC'
+    description: 'Permanent 24/7 Render Cloud Server - Play anywhere worldwide on ANY Wi-Fi or Mobile Network'
   }
 ];
 
@@ -36,7 +24,20 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
 
   useEffect(() => {
     if (isOpen) {
-      const activeUrl = socketService.getServerUrl();
+      let activeUrl = socketService.getServerUrl();
+      // If activeUrl was an old localhost, local IP or expired tunnel, auto-reset to official Render cloud server
+      if (
+        !activeUrl ||
+        activeUrl.includes('localhost') ||
+        activeUrl.includes('10.92.') ||
+        activeUrl.includes('192.168.') ||
+        activeUrl.includes('127.0.0.1') ||
+        activeUrl.includes('trycloudflare')
+      ) {
+        activeUrl = 'https://guess-the-11-backend.onrender.com';
+        socketService.setServerUrl(activeUrl);
+      }
+
       setCurrentUrl(activeUrl);
       setInputUrl(activeUrl);
       setIsConnected(socketService.isConnected());
@@ -68,7 +69,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
 
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 10000);
+      const timer = setTimeout(() => controller.abort(), 25000);
 
       const res = await fetch(`${urlToTest}/health`, {
         signal: controller.signal,
@@ -96,7 +97,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
       setTestStatus({
         testing: false,
         success: false,
-        message: err.name === 'AbortError' ? 'Connection timed out (10s)' : 'Cannot reach server at this address'
+        message: err.name === 'AbortError' ? 'Connection timed out (server waking up, please retry)' : 'Cannot reach server at this address'
       });
     }
   };
@@ -195,7 +196,7 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
                   setInputUrl(e.target.value);
                   setTestStatus(null);
                 }}
-                placeholder="http://10.92.131.244:4000"
+                placeholder="https://guess-the-11-backend.onrender.com"
                 className="flex-1 glass-input border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono text-xs focus:outline-none focus:border-indigo-400 font-sans"
               />
               <button
@@ -211,20 +212,32 @@ export const ServerSettingsModal: React.FC<ServerSettingsModalProps> = ({ isOpen
           </div>
 
           {/* Test Status Feedback */}
-          {testStatus && !testStatus.testing && (
+          {testStatus && (
             <div
               className={`p-3 rounded-xl text-xs font-semibold flex items-center gap-2 ${
-                testStatus.success
+                testStatus.testing
+                  ? 'bg-indigo-500/15 text-indigo-300 border border-indigo-500/30'
+                  : testStatus.success
                   ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/30'
                   : 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
               }`}
             >
-              {testStatus.success ? (
-                <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+              {testStatus.testing ? (
+                <>
+                  <RefreshCw className="w-4 h-4 flex-shrink-0 animate-spin text-indigo-400" />
+                  <span>Connecting to Live Cloud Server (may take a moment to wake up)...</span>
+                </>
+              ) : testStatus.success ? (
+                <>
+                  <Check className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+                  <span>{testStatus.message}</span>
+                </>
               ) : (
-                <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+                <>
+                  <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+                  <span>{testStatus.message}</span>
+                </>
               )}
-              <span>{testStatus.message}</span>
             </div>
           )}
 

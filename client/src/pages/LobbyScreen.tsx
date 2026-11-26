@@ -160,6 +160,7 @@ export const LobbyScreen: React.FC<LobbyScreenProps> = ({
               <Users className="w-4 h-4 text-[#7655F7]" />
               <span className="text-[#929BB3]">Squad status:</span>
               <span className="text-[#A78BFA] font-bold text-sm tabular-nums">{playerCount} / {maxPlayers} Players</span>
+              <span className="text-[#28C7E8] font-bold text-xs">• 11 Rounds</span>
             </div>
           </div>
 

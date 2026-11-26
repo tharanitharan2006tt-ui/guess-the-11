@@ -13,13 +13,17 @@ export const getBackendUrl = (): string => {
   // 1. Check local storage override if user configured it in-app
   if (typeof window !== 'undefined') {
     const stored = localStorage.getItem('guessthe11_server_url');
-    // Automatically migrate away from temporary tunnels to permanent Render cloud server
+    // Automatically migrate away from temporary tunnels, localhost, and local IPs to permanent Render cloud server
     if (
       stored &&
       (stored.includes('trycloudflare.com') ||
        stored.includes('loca.lt') ||
        stored.includes('remains-continent') ||
        stored.includes('trails-compressed') ||
+       stored.includes('localhost') ||
+       stored.includes('10.92.') ||
+       stored.includes('192.168.') ||
+       stored.includes('127.0.0.1') ||
        !stored.startsWith('http'))
     ) {
       localStorage.setItem('guessthe11_server_url', DEFAULT_SERVER_URL);

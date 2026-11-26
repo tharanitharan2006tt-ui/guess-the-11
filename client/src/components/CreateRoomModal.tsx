@@ -116,7 +116,7 @@ export const CreateRoomModal: React.FC<CreateRoomModalProps> = ({
                   <Flame className="w-4 h-4 text-indigo-400" />
                 </div>
                 <p className="text-[11px] text-slate-400 mt-1">
-                  Flexible lobby (2–10 players). Quick casual play.
+                  Flexible lobby (2–10 players). 11 rounds compulsory.
                 </p>
               </button>
             </div>
